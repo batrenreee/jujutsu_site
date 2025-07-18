@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jujutsu Kaisen Karakter Testi</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0a0a0a;
+      color: #ffffff;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px;
+      background-image: 
+    radial-gradient(circle, rgba(255,59,59,0.6), rgba(10,10,10,0.8)),
+    url('img/sukuna.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      box-shadow: 0 0 20px #ff3b3b;
+    }
+
+
+    header h1 {
+      font-size: 3em;
+      text-shadow: 0 0 10px #ff3b3b;
+      margin: 0;
+    }
+
+    nav {
+      background: #111111;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 15px 0;
+      box-shadow: 0 3px 6px rgba(255, 59, 59, 0.6);
+    }
+
+    nav a {
+      color: #f2f2f2;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #ff3b3b;
+      text-shadow: 0 0 8px #ff3b3b;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #111111;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #ff3b3b;
+    }
+
+    form label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    form select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: none;
+      background-color: #1e1e1e;
+      color: #fff;
+      font-size: 1em;
+    }
+
+    form button {
+      width: 100%;
+      margin-top: 30px;
+      padding: 15px;
+      font-size: 16px;
+      border: none;
+      background-color: #ff3b3b;
+      color: black;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #ff3b3b;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    form button:hover {
+      background-color: #cc2f2f;
+      box-shadow: 0 0 20px #cc2f2f;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 50px;
+      color: #fff;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ff3b3b;
+      text-align: center;
+    }
+
+    th {
+      background-color: #2c0a0a;
+      color: #ff3b3b;
+    }
+
+    caption {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #ff3b3b;
+    }
+
+    .result {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 1.6em;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 8px #ffd700;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Jujutsu Kaisen Testi</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Ana Sayfa</a>
+    <a href="manga.html">Manga</a>
+    <a href="karakterler.html">Karakterler</a>
+    <a href="satoru.html">Karakter Testi</a>
+  </nav>
+
+  <div class="container">
+    <form id="testForm">
+      <label>1. En güçlü yönün hangisi?</label>
+      <select name="q1" required>
+        <option value="Zeka">Zeka</option>
+        <option value="Sadakat">Sadakat</option>
+        <option value="Güç">Güç</option>
+        <option value="Çılgınlık">Çılgınlık</option>
+      </select>
+
+      <label>2. Takımda hangi rolü alırsın?</label>
+      <select name="q2" required>
+        <option value="Lider">Lider</option>
+        <option value="Destek">Destek</option>
+        <option value="Stratejist">Stratejist</option>
+        <option value="Ön cephe">Ön cephe</option>
+      </select>
+
+      <label>3. Savaş stilin nedir?</label>
+      <select name="q3" required>
+        <option value="Alan kontrolü">Alan kontrolü</option>
+        <option value="Yakın dövüş">Yakın dövüş</option>
+        <option value="Uzaktan saldırı">Uzaktan saldırı</option>
+        <option value="Kaotik saldırı">Kaotik saldırı</option>
+      </select>
+
+      <label>4. Zor durumda ne yaparsın?</label>
+      <select name="q4" required>
+        <option value="Soğukkanlı kalırım">Soğukkanlı kalırım</option>
+        <option value="Risk alırım">Risk alırım</option>
+        <option value="Takımı korurum">Takımı korurum</option>
+        <option value="Rakibi psikolojik çökertirim">Rakibi psikolojik çökertirim</option>
+      </select>
+
+      <label>5. Favori renk?</label>
+      <select name="q5" required>
+        <option value="Mavi">Mavi</option>
+        <option value="Kırmızı">Kırmızı</option>
+        <option value="Siyah">Siyah</option>
+        <option value="Beyaz">Beyaz</option>
+      </select>
+
+      <button type="submit">Sonucu Göster</button>
+    </form>
+
+    <div id="result" class="result"></div>
+
+    <table>
+      <caption>📊 Karakter Özellikleri</caption>
+      <tr>
+        <th>Karakter</th>
+        <th>Güç</th>
+        <th>Zeka</th>
+        <th>Sadakat</th>
+        <th>Tehlike</th>
+      </tr>
+      <tr>
+        <td>Gojo Satoru</td>
+        <td>10/10</td>
+        <td>9/10</td>
+        <td>8/10</td>
+        <td>⚠️ Yüksek</td>
+      </tr>
+      <tr>
+        <td>Itadori Yuji</td>
+        <td>8/10</td>
+        <td>7/10</td>
+        <td>10/10</td>
+        <td>Orta</td>
+      </tr>
+      <tr>
+        <td>Megumi Fushiguro</td>
+        <td>7/10</td>
+        <td>9/10</td>
+        <td>9/10</td>
+        <td>Düşük</td>
+      </tr>
+      <tr>
+        <td>Nobara Kugisaki</td>
+        <td>6/10</td>
+        <td>8/10</td>
+        <td>7/10</td>
+        <td>Orta</td>
+      </tr>
+      <tr>
+        <td>Sukuna</td>
+        <td>10/10</td>
+        <td>10/10</td>
+        <td>1/10</td>
+        <td>☠️ Aşırı</td>
+      </tr>
+    </table>
+  </div>
+
+  <script>
+    document.getElementById('testForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const answers = Array.from(formData.values());
+
+      const scores = {
+        "Gojo Satoru": 0,
+        "Itadori Yuji": 0,
+        "Megumi Fushiguro": 0,
+        "Nobara Kugisaki": 0,
+        "Sukuna": 0
+      };
+
+      // Puanlama kuralları
+      answers.forEach(answer => {
+        switch (answer) {
+          case "Zeka":
+          case "Alan kontrolü":
+          case "Mavi":
+          case "Lider":
+            scores["Gojo Satoru"] += 2;
+            break;
+
+          case "Sadakat":
+          case "Yakın dövüş":
+          case "Kırmızı":
+          case "Takımı korurum":
+            scores["Itadori Yuji"] += 2;
+            break;
+
+          case "Stratejist":
+          case "Soğukkanlı kalırım":
+          case "Siyah":
+          case "Uzaktan saldırı":
+            scores["Megumi Fushiguro"] += 2;
+            break;
+
+          case "Risk alırım":
+          case "Rakibi psikolojik çökertirim":
+          case "Beyaz":
+            scores["Nobara Kugisaki"] += 2;
+            break;
+
+          case "Çılgınlık":
+          case "Kaotik saldırı":
+            scores["Sukuna"] += 2;
+            break;
+        }
+      });
+
+      // En yüksek puanlı karakteri bul
+      const [character, score] = Object.entries(scores).reduce((max, curr) => curr[1] > max[1] ? curr : max);
+
+      document.getElementById('result').innerText = `🎯 En çok benzediğin karakter: ${character}`;
+    });
+  </script>
+
+</body>
+</html>
