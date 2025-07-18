@@ -25,8 +25,6 @@ Bu proje, popüler anime/manga **Jujutsu Kaisen** temalı bir bilgi ve eğlence 
 |-----------|----------------|
 | ![home](./home.png) | ![test](./test.png) |
 
-> `screenshots/` klasörü oluşturup içine görselleri koyabilirsin.
-
 ---
 
 ## 🇬🇧 English Description
