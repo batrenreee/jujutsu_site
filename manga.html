@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jujutsu Kaisen Haber Merkezi</title>
-  <meta name="description" content="Jujutsu Kaisen anime ve manga haberleri">
+  <title>Manga Arşivi | Jujutsu Kaisen Haber Merkezi</title>
+  <meta name="description" content="Jujutsu Kaisen manga bölümleri ve analizleri">
   <meta name="author" content="Eren">
 
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 
   <style>
+    /* --- Temel Ayarlar --- */
     * {
       margin: 0;
       padding: 0;
@@ -21,99 +21,224 @@
       background: linear-gradient(to bottom, #0f0f0f, #1a1a1a);
       color: #f2f2f2;
       line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
+
+    /* --- Header --- */
     header {
-      background: url('img/gojo.jpg') no-repeat center center/cover;
-      padding: 80px 20px;
+      /* Header görselini biraz daha manga paneli havasına soktuk */
+      background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.6)), url('img/gojo.jpg') no-repeat center center/cover;
+      padding: 100px 20px;
       text-align: center;
       color: white;
-      box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.6);
+      border-bottom: 4px solid #ff4747;
     }
     header h1 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 800;
-      text-shadow: 2px 2px 10px #000;
+      text-shadow: 2px 2px 15px rgba(255, 71, 71, 0.6);
+      letter-spacing: 2px;
+      margin-bottom: 10px;
     }
+    header p {
+      color: #ccc;
+      font-size: 1.2rem;
+    }
+
+    /* --- Navigasyon --- */
     nav {
       background: #111;
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 30px;
       padding: 15px 0;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
     nav a {
       color: #f2f2f2;
       text-decoration: none;
       font-weight: 600;
-      transition: color 0.3s ease;
+      transition: all 0.3s ease;
+      padding: 5px 12px;
+      border-radius: 4px;
     }
     nav a:hover {
-      color: #ff4f4f;
+      background-color: #ff4747;
+      color: #000;
     }
+
+    /* --- Ana İçerik --- */
     main {
-      max-width: 1200px;
+      max-width: 1000px; /* Okuma rahatlığı için genişliği biraz daralttık */
       margin: 40px auto;
       padding: 20px;
+      flex: 1;
     }
-    main h2 {
+    
+    section {
+      margin-bottom: 60px;
+    }
+
+    section h2 {
       font-size: 2.2rem;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
       border-left: 6px solid #ff4747;
-      padding-left: 12px;
+      padding-left: 15px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .manga-episode {
+
+    /* --- Manga Kart Tasarımı --- */
+    .manga-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .manga-card {
       background: #1e1e1e;
       border: 1px solid #333;
       border-radius: 12px;
+      display: flex;
+      align-items: stretch; /* İçindekilerin boyunu eşitle */
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    /* Hover Efekti */
+    .manga-card:hover {
+      transform: translateX(10px); /* Sağa doğru hafif kayma */
+      box-shadow: -5px 5px 20px rgba(255, 71, 71, 0.2);
+      border-color: #ff4747;
+    }
+
+    /* Sol Taraftaki Bölüm Numarası Alanı */
+    .chapter-badge {
+      background: #2a2a2a;
+      min-width: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-right: 1px solid #333;
+      color: #ff4747;
+    }
+    .chapter-badge span {
+      font-size: 0.9rem;
+      color: #777;
+    }
+    .chapter-badge strong {
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    /* İçerik Alanı */
+    .card-content {
       padding: 20px;
-      margin-bottom: 30px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      flex: 1;
     }
-    .manga-episode:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(255, 71, 71, 0.2);
+    .card-content h3 {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      color: #fff;
     }
-    .episode-info h3 {
-      font-size: 1.5rem;
-      color: #ff4747;
+    .card-content .date {
+      font-size: 0.85rem;
+      color: #888;
       margin-bottom: 10px;
+      display: block;
     }
-    .episode-info h3 a {
-      color: #ff4747;
-      text-decoration: none;
-    }
-    .episode-info h3 a:hover {
-      text-decoration: underline;
-    }
-    .episode-info p {
+    .card-content p {
       color: #ccc;
-      margin-bottom: 10px;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
-    .episode-summary {
-      font-weight: 400;
-      color: #ddd;
+
+    /* Sağdaki Buton Alanı */
+    .card-action {
+      display: flex;
+      align-items: center;
+      padding-right: 20px;
     }
+    .read-btn {
+      background-color: transparent;
+      border: 2px solid #ff4747;
+      color: #ff4747;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: 800;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .manga-card:hover .read-btn {
+      background-color: #ff4747;
+      color: #fff;
+    }
+
+    /* Yeni Etiketi */
+    .new-tag {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: #ff4747;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-bottom-left-radius: 8px;
+    }
+
+    /* --- Footer --- */
     footer {
       background: #111;
       text-align: center;
-      padding: 20px;
+      padding: 30px 20px;
       font-size: 0.9rem;
       color: #777;
       border-top: 1px solid #333;
-      margin-top: 40px;
     }
-    @media (min-width: 768px) {
-      .manga-episode {
-        padding: 30px;
+
+    /* Mobil Düzenleme */
+    @media (max-width: 768px) {
+      .manga-card {
+        flex-direction: column;
+      }
+      .chapter-badge {
+        flex-direction: row;
+        gap: 10px;
+        padding: 10px;
+        border-right: none;
+        border-bottom: 1px solid #333;
+        width: 100%;
+      }
+      .card-action {
+        padding: 0 20px 20px 20px;
+        justify-content: flex-start;
+      }
+      .read-btn {
+        width: 100%;
+        text-align: center;
       }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>Jujutsu Kaisen</h1>
+    <h1>Manga Arşivi</h1>
+    <p>Son bölümler, analizler ve teoriler</p>
   </header>
+
   <nav>
     <a href="index.html">Ana Sayfa</a>
     <a href="manga.html">Manga</a>
@@ -123,75 +248,84 @@
 
   <main>
     <section>
-      <h2>Son Bölümler</h2>
+      <h2>🔥 Son Bölümler</h2>
+      
+      <div class="manga-list">
+        
+        <article class="manga-card">
+          <div class="new-tag">YENİ</div>
+          <div class="chapter-badge">
+            <span>BÖLÜM</span>
+            <strong>262</strong>
+          </div>
+          <div class="card-content">
+            <h3>Büyük Şok: Alanın İçinde</h3>
+            <span class="date">📅 10 Temmuz 2025</span>
+            <p>Gojo'nun Sukuna ile olan savaşı tüm seriyi salladı. Bu bölümde yaşananlar hayranları derinden etkiledi. Gojo'nun akıbeti hala belirsizken, yeni güçler ortaya çıkmaya başladı.</p>
+          </div>
+          <div class="card-action">
+            <a href="https://sadscans.com/reader/66620538b4670" target="_blank" class="read-btn">OKU &rarr;</a>
+          </div>
+        </article>
 
-      <article class="manga-episode">
-        <div class="episode-info">
-          <h3>
-            <a href="https://sadscans.com/reader/66620538b4670" target="_blank" rel="noopener noreferrer">
-              Bölüm 262 - Büyük Şok
-            </a>
-          </h3>
-          <p><strong>Yayın Tarihi:</strong> 10 Temmuz 2025</p>
-          <p class="episode-summary">
-            Gojo'nun Sukuna ile olan savaşı tüm seriyi salladı. Bu bölümde yaşananlar hayranları derinden etkiledi. 
-            Gojo'nun akıbeti hala belirsizken, yeni güçler ortaya çıkmaya başladı.
-          </p>
-        </div>
-      </article>
+        <article class="manga-card">
+          <div class="chapter-badge">
+            <span>BÖLÜM</span>
+            <strong>261</strong>
+          </div>
+          <div class="card-content">
+            <h3>Sırlar ve Savaşlar</h3>
+            <span class="date">📅 3 Temmuz 2025</span>
+            <p>Megumi ve Yuji’nin karşı karşıya geldiği bu bölüm, yoğun aksiyon sahneleri ve sürpriz gelişmeler içeriyor. Karakterlerin motivasyonları derinleşiyor.</p>
+          </div>
+          <div class="card-action">
+            <a href="https://sadscans.com/reader/665078fc745cb" target="_blank" class="read-btn">OKU &rarr;</a>
+          </div>
+        </article>
 
-      <article class="manga-episode">
-        <div class="episode-info">
-          <h3>
-            <a href="https://sadscans.com/reader/665078fc745cb" target="_blank" rel="noopener noreferrer">
-              Bölüm 261 - Sırlar ve Savaşlar
-            </a>
-          </h3>
-          <p><strong>Yayın Tarihi:</strong> 3 Temmuz 2025</p>
-          <p class="episode-summary">
-            Megumi ve Yuji’nin karşı karşıya geldiği bu bölüm, yoğun aksiyon sahneleri ve sürpriz gelişmeler içeriyor. 
-            Karakterlerin motivasyonları derinleşirken, yeni ittifaklar kuruluyor.
-          </p>
-        </div>
-      </article>
+        <article class="manga-card">
+          <div class="chapter-badge">
+            <span>BÖLÜM</span>
+            <strong>260</strong>
+          </div>
+          <div class="card-content">
+            <h3>Karanlık Gölgeler</h3>
+            <span class="date">📅 26 Haziran 2025</span>
+            <p>Kara büyücüler ve lanetler arasındaki mücadele şiddetleniyor. Bu bölümde geçmişe dair sırlar açığa çıkıyor.</p>
+          </div>
+          <div class="card-action">
+            <a href="https://sadscans.com/reader/66479bb064fe9" target="_blank" class="read-btn">OKU &rarr;</a>
+          </div>
+        </article>
 
-      <article class="manga-episode">
-        <div class="episode-info">
-          <h3>
-            <a href="https://sadscans.com/reader/66479bb064fe9" target="_blank" rel="noopener noreferrer">
-              Bölüm 260 - Karanlık Gölgeler
-            </a>
-          </h3>
-          <p><strong>Yayın Tarihi:</strong> 26 Haziran 2025</p>
-          <p class="episode-summary">
-            Kara büyücüler ve lanetler arasındaki mücadele şiddetleniyor. Bu bölümde geçmişe dair sırlar açığa çıkıyor ve 
-            karakterlerin geçmişi detaylıca işleniyor.
-          </p>
-        </div>
-      </article>
+      </div>
     </section>
 
     <section>
-      <h2>Manga Hakkında Özel Analizler</h2>
-      <article class="manga-episode">
-        <div class="episode-info">
-          <h3>
-            <a href="https://jujutsu--kaisen-fandom-com.translate.goog/wiki/Satoru_Gojo?_x_tr_sl=en&_x_tr_tl=tr&_x_tr_hl=tr&_x_tr_pto=tc" target="_blank" rel="noopener noreferrer">
-              Gojo’nun Gücü ve Geleceği
-            </a>
-          </h3>
-          <p><strong>Yayın Tarihi:</strong> 1 Temmuz 2025</p>
-          <p class="episode-summary">
-            Gojo Satoru'nun güçlerinin derinlemesine analizi ve bu güçlerin ilerleyen bölümlerde hikayeye etkileri üzerine detaylı bir inceleme.
-            Manga evreninde yeni güç dengeleri oluşuyor.
-          </p>
-        </div>
-      </article>
+      <h2>🧠 Özel Analizler</h2>
+      
+      <div class="manga-list">
+        <article class="manga-card" style="border-left: 4px solid #fff;">
+          <div class="chapter-badge" style="background: #222;">
+            <span style="font-size: 2rem;">?</span>
+          </div>
+          <div class="card-content">
+            <h3>Gojo’nun Gücü ve Geleceği</h3>
+            <span class="date">📝 İnceleme - 1 Temmuz 2025</span>
+            <p>Gojo Satoru'nun güçlerinin derinlemesine analizi ve bu güçlerin ilerleyen bölümlerde hikayeye etkileri üzerine detaylı bir inceleme.</p>
+          </div>
+          <div class="card-action">
+            <a href="https://jujutsu--kaisen-fandom-com.translate.goog/wiki/Satoru_Gojo?_x_tr_sl=en&_x_tr_tl=tr" target="_blank" class="read-btn">İNCELE &rarr;</a>
+          </div>
+        </article>
+      </div>
+
     </section>
   </main>
 
   <footer>
     <p>&copy; 2025 Jujutsu Kaisen Haber Merkezi - Tüm hakları saklıdır | Hazırlayan: Eren</p>
   </footer>
+
 </body>
 </html>
