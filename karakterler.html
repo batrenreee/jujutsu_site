@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Karakterler | Jujutsu Kaisen Haber Merkezi</title>
-  <meta name="description" content="Jujutsu Kaisen karakter rehberi" />
+  <meta name="description" content="Jujutsu Kaisen karakter rehberi ve güç analizleri" />
   <meta name="author" content="Eren" />
 
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
 
   <style>
+    /* --- Temel Ayarlar --- */
     * {
       margin: 0;
       padding: 0;
@@ -20,116 +21,191 @@
       background: linear-gradient(to bottom, #0f0f0f, #1a1a1a);
       color: #f2f2f2;
       line-height: 1.6;
+      min-height: 100vh;
     }
+
+    /* --- Header --- */
     header {
-      background: url('img/gojo.jpg') no-repeat center center/cover;
-      padding: 80px 20px;
+      /* Resim üzerine karanlık katman ekledik ki yazı okunsun */
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('img/gojo.jpg') no-repeat center top/cover;
+      padding: 100px 20px;
       text-align: center;
       color: white;
-      box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.6);
+      border-bottom: 4px solid #ff4747;
     }
     header h1 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 800;
-      text-shadow: 2px 2px 10px #000;
+      text-shadow: 2px 2px 15px rgba(255, 71, 71, 0.6);
       margin-bottom: 10px;
+      letter-spacing: 1px;
     }
     header p {
-      font-size: 1.2rem;
-      color: #ccc;
+      font-size: 1.3rem;
+      color: #ddd;
     }
+
+    /* --- Navigasyon --- */
     nav {
       background: #111;
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 30px;
       padding: 15px 0;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
     nav a {
       color: #f2f2f2;
       text-decoration: none;
       font-weight: 600;
-      transition: color 0.3s ease;
+      transition: all 0.3s ease;
+      padding: 5px 12px;
+      border-radius: 4px;
     }
     nav a:hover {
-      color: #ff4f4f;
+      background-color: #ff4747;
+      color: #000;
     }
+
+    /* --- Arama Çubuğu --- */
+    .search-container {
+      max-width: 600px;
+      margin: 40px auto 20px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .search-input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 30px;
+      border: 2px solid #333;
+      background: #1e1e1e;
+      color: #fff;
+      font-size: 1.1rem;
+      font-family: 'Outfit', sans-serif;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .search-input:focus {
+      border-color: #ff4747;
+      box-shadow: 0 0 15px rgba(255, 71, 71, 0.4);
+    }
+
+    /* --- Karakter Alanı --- */
     section {
       max-width: 1200px;
-      margin: 40px auto;
+      margin: 0 auto 40px auto;
       padding: 20px;
     }
     section h2 {
       font-size: 2.2rem;
       margin-bottom: 25px;
       border-left: 6px solid #ff4747;
-      padding-left: 12px;
+      padding-left: 15px;
+      color: #fff;
     }
+
     .karakterler {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-      margin-top: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
     }
+
+    /* --- Kart Tasarımı --- */
     .karakter-kart {
       background: #1e1e1e;
       border: 1px solid #333;
-      border-radius: 12px;
+      border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding-bottom: 15px;
+      position: relative;
     }
+    
+    /* Kart Hover Efekti */
     .karakter-kart:hover {
-      transform: scale(1.03);
-      box-shadow: 0 10px 20px rgba(255, 71, 71, 0.3);
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(255, 71, 71, 0.25);
+      border-color: #ff4747;
     }
-    .karakter-kart img {
+
+    .img-wrapper {
       width: 100%;
-      max-height: 320px;
-      object-fit: cover;
+      height: 350px;
+      overflow: hidden; /* Resim büyürken dışarı taşmasın */
       border-bottom: 2px solid #ff4747;
     }
-    .karakter-kart div {
-      padding: 15px;
+
+    .karakter-kart img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease; /* Resim için zoom efekti */
     }
+
+    .karakter-kart:hover img {
+      transform: scale(1.1); /* Resim hafifçe büyür */
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     .karakter-kart h3 {
-      margin-bottom: 10px;
       color: #ff4747;
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       font-weight: 800;
+      margin-bottom: 5px;
     }
-    .karakter-kart p {
+
+    /* Bilgi Etiketleri */
+    .info-tag {
+      font-size: 0.9rem;
       color: #ccc;
-      margin-bottom: 8px;
-      font-weight: 500;
-      font-size: 0.95rem;
+      background: #2a2a2a;
+      padding: 8px;
+      border-radius: 6px;
+      border-left: 3px solid #777;
     }
+    .info-tag strong {
+      color: #fff;
+      display: block; /* Başlığı üst satıra al */
+      margin-bottom: 2px;
+    }
+
+    .hikaye {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: #bbb;
+      line-height: 1.5;
+    }
+
+    /* --- Footer --- */
     footer {
       background: #111;
       text-align: center;
-      padding: 20px;
+      padding: 30px 20px;
       font-size: 0.9rem;
       color: #777;
       border-top: 1px solid #333;
-      margin-top: 40px;
-    }
-    @media (min-width: 768px) {
-      .karakter-kart {
-        flex-direction: column;
-      }
+      margin-top: auto;
     }
   </style>
 </head>
 <body>
+
   <header>
     <h1>Jujutsu Kaisen Karakter Rehberi</h1>
-    <p>Favori karakterlerinizin derinlemesine analizleri</p>
+    <p>Büyücüler, Lanetler ve Özel Sınıf Varlıklar</p>
   </header>
 
   <nav>
@@ -139,256 +215,266 @@
     <a href="test.html">Karakter Testi</a>
   </nav>
 
+  <div class="search-container">
+    <input type="text" class="search-input" id="searchInput" placeholder="Karakter ara... (Örn: Sukuna, Gojo, Maki)">
+  </div>
+
   <section>
-    <h2>Karakterler</h2>
-    <div class="karakterler">
+    <h2>Karakter Listesi</h2>
+    <div class="karakterler" id="karakterListesi">
 
       <article class="karakter-kart">
-        <img src="img/gojo.jpg" alt="Satoru Gojo" width="100" height="300"/>
-        <div>
+        <div class="img-wrapper">
+          <img src="img/gojo.jpg" alt="Satoru Gojo" loading="lazy"/>
+        </div>
+        <div class="card-body">
           <h3>Satoru Gojo</h3>
-          <p><strong>Unvan:</strong> En Güçlü Büyücü</p>
-          <p><strong>Teknik:</strong> Limitless (Sonsuzluk), Altı Göz (Six Eyes)</p>
-          <p><strong>Hikaye:</strong> Gojo, modern büyücülük dünyasının zirvesinde yer alır. Sonsuz lanet enerjisi ve mekan algısı ile dünyanın en güçlü büyücüsüdür. Öğrencilerine bağlıdır, ancak düşmanlarına karşı acımasızdır.</p>
+          <div class="info-tag">
+            <strong>Unvan</strong> En Güçlü Büyücü
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> Limitless (Sonsuzluk), Altı Göz
+          </div>
+          <p class="hikaye">Gojo, modern büyücülük dünyasının zirvesinde yer alır. Sonsuz lanet enerjisi ve mekan algısı ile dünyanın en güçlü büyücüsüdür. Düşmanlarına karşı acımasızdır.</p>
         </div>
       </article>
 
       <article class="karakter-kart">
-        <img src="img/yuji.jpg" alt="Yuji Itadori" width="100" height="300"/>
-        <div>
+        <div class="img-wrapper">
+           <img src="img/yuji.jpg" alt="Yuji Itadori" loading="lazy"/>
+        </div>
+        <div class="card-body">
           <h3>Yuji Itadori</h3>
-          <p><strong>Unvan:</strong> Sukuna'nın Kabı</p>
-          <p><strong>Teknik:</strong> Kara Darbe (Black Flash), Kan Manipülasyonu</p>
-          <p><strong>Hikaye:</strong> Yuji, büyükbabası tarafından herkesin anlamlı bir şekilde ölmesi gerektiği öğütü ile büyütüldü. Sukuna’nın parmaklarını yiyerek lanetli dünyaya adım attı ve insanlığı koruma yolunda ağır yükler taşıyor.</p>
+          <div class="info-tag">
+            <strong>Unvan</strong> Sukuna'nın Kabı
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> Kara Darbe (Black Flash), Kan Manipülasyonu
+          </div>
+          <p class="hikaye">Yuji, Sukuna’nın parmaklarını yiyerek lanetli dünyaya adım attı. İnsanüstü fiziksel güce sahiptir ve insanlığı koruma yolunda ağır yükler taşır.</p>
         </div>
       </article>
 
       <article class="karakter-kart">
-        <img src="img/megumi.jpg" alt="Megumi Fushiguro" width="100" height="300" />
-        <div>
-          <h3>Megumi Fushiguro</h3>
-          <p><strong>Unvan:</strong> Zenin Klanı Vârisi</p>
-          <p><strong>Teknik:</strong> On Gölge Tekniği (Shikigami çağırma)</p>
-          <p><strong>Hikaye:</strong> İçine kapanık ve ciddi bir karakter. Adalet anlayışıyla hareket eder. Güçlü potansiyeli ve trajik geçmişi, onu hikayenin merkezine taşır.</p>
+        <div class="img-wrapper">
+          <img src="img/sukuna.jpg" alt="Ryomen Sukuna" loading="lazy"/>
         </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/nanami.jpg" alt="Kento Nanami" width="100" height="300" />
-        <div>
-          <h3>Kento Nanami</h3>
-          <p><strong>Unvan:</strong> Eski Ofis Çalışanı, Şimdi Büyücü</p>
-          <p><strong>Teknik:</strong> Orta Düzey Lanet Kesici</p>
-          <p><strong>Hikaye:</strong> Nanami, iş hayatından sıkılıp büyücülüğe döndü. Disiplinli ve ciddi tavırları ile ekibin güvenilir üyelerinden biridir.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/nobara.jpg" alt="Nobara Kugisaki" width="100" height="300" />
-        <div>
-          <h3>Nobara Kugisaki</h3>
-          <p><strong>Unvan:</strong> Cesur Büyücü</p>
-          <p><strong>Teknik:</strong> Çivi ve Kukla Laneti</p>
-          <p><strong>Hikaye:</strong> Kendine güvenen ve cesur Nobara, arkadaşları için her zaman savaşır. Büyü teknikleri yaratıcı ve etkileyicidir.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/panda.jpg" alt="Panda" width="100" height="300" />
-        <div>
-          <h3>Panda</h3>
-          <p><strong>Unvan:</strong> Okulun Güçlü Lanetli Nesnesi</p>
-          <p><strong>Teknik:</strong> Güçlü Fiziksel Yetenekler</p>
-          <p><strong>Hikaye:</strong> Panda, sadece bir panda değil, aynı zamanda bilinçli ve çok güçlü bir varlık. Okulun güçlü destekçisidir.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/mahito.jpg" alt="Mahito" width="100" height="300" />
-        <div>
-          <h3>Mahito</h3>
-          <p><strong>Unvan:</strong> Lanetli Ruh</p>
-          <p><strong>Teknik:</strong> Form Manipülasyonu</p>
-          <p><strong>Hikaye:</strong> Mahito, insan ruhlarını manipüle ederek korkunç bir tehdit oluşturur. Jujutsu dünyasının ana antagonisti olarak öne çıkar.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/sukuna.jpg" alt="Ryomen Sukuna" width="100" height="300" />
-        <div>
+        <div class="card-body">
           <h3>Ryomen Sukuna</h3>
-          <p><strong>Unvan:</strong> Lanetlerin Kralı</p>
-          <p><strong>Teknik:</strong> Olağanüstü Lanet Gücü</p>
-          <p><strong>Hikaye:</strong> Jujutsu Kaisen evrenindeki en güçlü ve tehlikeli lanetlerden biri. Yuji'nin içinde yaşar ve büyük tehdit oluşturur.</p>
+          <div class="info-tag">
+            <strong>Unvan</strong> Lanetlerin Kralı
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> Malevolent Shrine (Fukuma Mizushi)
+          </div>
+          <p class="hikaye">Jujutsu Kaisen evrenindeki en güçlü ve tehlikeli lanet. Bin yıl önceki altın çağın tartışmasız lideri. Tamamen kötülük ve güç odaklıdır.</p>
         </div>
       </article>
 
       <article class="karakter-kart">
-        <img src="img/maki.jpg" alt="Maki" width="100" height="300"/>
-        <div>
+        <div class="img-wrapper">
+          <img src="img/megumi.jpg" alt="Megumi Fushiguro" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <h3>Megumi Fushiguro</h3>
+          <div class="info-tag">
+            <strong>Unvan</strong> Zenin Klanı Vârisi
+          </div>
+          <div class="info-tag">
+             <strong>Teknik</strong> On Gölge Tekniği (Ten Shadows)
+          </div>
+          <p class="hikaye">İçine kapanık ve ciddi bir karakter. Mahoraga'yı çağırma potansiyeline sahip tek kişidir. Gojo tarafından eğitilmiştir.</p>
+        </div>
+      </article>
+
+      <article class="karakter-kart">
+        <div class="img-wrapper">
+          <img src="img/toji.jpg" alt="Toji Fushiguro" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <h3>Toji Fushiguro</h3>
+          <div class="info-tag">
+            <strong>Unvan</strong> Büyücü Katili
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> Fiziksel Cennet Kısıtlaması
+          </div>
+          <p class="hikaye">Zenin klanından dışlanmış, hiç lanet enerjisi olmayan ancak fiziksel gücüyle en güçlü büyücüleri bile alt edebilen bir suikastçidir.</p>
+        </div>
+      </article>
+
+      <article class="karakter-kart">
+        <div class="img-wrapper">
+          <img src="img/nanami.jpg" alt="Kento Nanami" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <h3>Kento Nanami</h3>
+          <div class="info-tag">
+            <strong>Unvan</strong> 1. Seviye Büyücü
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> 7:3 Oran Tekniği
+          </div>
+          <p class="hikaye">Eski ofis çalışanı. "Çalışmak boktandır, büyücülük de boktandır" felsefesine sahiptir. Yuji'ye bir mentor gibi yaklaşır.</p>
+        </div>
+      </article>
+
+      <article class="karakter-kart">
+        <div class="img-wrapper">
+           <img src="img/nobara.jpg" alt="Nobara Kugisaki" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <h3>Nobara Kugisaki</h3>
+          <div class="info-tag">
+            <strong>Unvan</strong> 3. Sınıf Öğrenci
+          </div>
+          <div class="info-tag">
+             <strong>Teknik</strong> Hasır Bebek Tekniği (Resonance)
+          </div>
+          <p class="hikaye">Taşradan Tokyo'ya gelen cesur ve kendine güvenen bir büyücü. Çekiç, çivi ve hasır bebek kullanarak rakiplerine uzaktan hasar verir.</p>
+        </div>
+      </article>
+
+      <article class="karakter-kart">
+        <div class="img-wrapper">
+           <img src="img/yuta.jpg" alt="Yuta Okkotsu" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <h3>Yuta Okkotsu</h3>
+          <div class="info-tag">
+            <strong>Unvan</strong> Özel Sınıf Büyücü
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> Kopyalama & Rika
+          </div>
+          <p class="hikaye">Gojo'dan sonra modern çağın en yetenekli ikinci büyücüsü olarak görülür. Lanetlerin Kraliçesi Rika ile bağlantılıdır.</p>
+        </div>
+      </article>
+
+      <article class="karakter-kart">
+        <div class="img-wrapper">
+          <img src="img/maki.jpg" alt="Maki Zenin" loading="lazy"/>
+        </div>
+        <div class="card-body">
           <h3>Maki Zenin</h3>
-          <p><strong>Unvan:</strong>Lanetli Silah Kullanıcısı</p>
-          <p><strong>Teknik:</strong>Üstün Lanetli Silah Kullanma Yeteneği</p>
-          <p><strong>Hikaye:</strong>Üç Büyük Büyücü Ailesinden birinde büyücü olmayan Maki, sürekli kötü muameleye maruz kalmış ve Zenin klanından atılmak zorunda hissetmiştir. Ailesine rağmen büyük bir jujutsu büyücüsü olmayı hedeflemektedir. Arkadaşları Panda ve Toge Inumaki ile yakın bir şekilde çalışırken , birinci sınıf öğrencilerine de rol model olmuştur.</p>
+          <div class="info-tag">
+            <strong>Unvan</strong> Lanetli Silah Uzmanı
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> Cennet Kısıtlaması (Toji gibi)
+          </div>
+          <p class="hikaye">Zenin klanı tarafından aşağılanan ancak inanılmaz fiziksel gücüyle klanını yerle bir eden güçlü bir savaşçı.</p>
         </div>
       </article>
 
       <article class="karakter-kart">
-        <img src="img/inumaki.jpg" alt="İnumaki" width="100" height="300"/>
-        <div>
-          <h3>Toge İnumaki</h3>
-          <p><strong>Unvan:</strong>Lanetli Dil Üstadı</p>
-          <p><strong>Teknik:</strong>Lanetli Konuşma</p>
-          <p><strong>Hikaye:</strong>Inumaki Ailesi’nin bir üyesi olarak, Toge saygı duyulan yarı birinci kademe jujutsu sahiridir. Aoi Todo’nun yanı sıra, Yuta ve Hakari’nin dışında en güçlü ve en saygın yeteneğe sahip öğrencidir.</p>
+        <div class="img-wrapper">
+          <img src="img/kinji.jpg" alt="Kinji Hakari" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <h3>Kinji Hakari</h3>
+          <div class="info-tag">
+            <strong>Unvan</strong> Kumarbaz Büyücü
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> Idle Death Gamble (Ölümsüzlük)
+          </div>
+          <p class="hikaye">Tutturduğunda Gojo'dan bile güçlü olabileceği söylenen, şansı yeteneğe çeviren çılgın bir dövüşçü.</p>
+        </div>
+      </article>
+
+      <article class="karakter-kart">
+        <div class="img-wrapper">
+          <img src="img/mahito.jpg" alt="Mahito" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <h3>Mahito</h3>
+          <div class="info-tag">
+            <strong>Unvan</strong> İnsanların Nefreti
+          </div>
+          <div class="info-tag">
+             <strong>Teknik</strong> Ruh Biçimlendirme
+          </div>
+          <p class="hikaye">İnsanların birbirine duyduğu nefretten doğan lanet. Ruhun şeklini değiştirerek insanları canavara dönüştürebilir. Yuji'nin baş düşmanıdır.</p>
+        </div>
+      </article>
+
+      <article class="karakter-kart">
+        <div class="img-wrapper">
+          <img src="img/kenjaku.jpg" alt="Kenjaku" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <h3>Kenjaku</h3>
+          <div class="info-tag">
+            <strong>Unvan</strong> Beyin
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> Beden Değiştirme
+          </div>
+          <p class="hikaye">Yüzyıllardır farklı bedenleri ele geçirerek planlar yapan, Geto Suguru'nun bedenini kullanan asıl kötü zeka.</p>
+        </div>
+      </article>
+
+       <article class="karakter-kart">
+        <div class="img-wrapper">
+          <img src="img/todo.jpg" alt="Aoi Todo" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <h3>Aoi Todo</h3>
+          <div class="info-tag">
+            <strong>Unvan</strong> 1. Sınıf Büyücü
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> Boogie Woogie
+          </div>
+          <p class="hikaye">"Besto Friendo!" Yuji'nin en iyi arkadaşı ve akıl hocası. Yer değiştirme tekniği ile savaşın akışını değiştirir.</p>
+        </div>
+      </article>
+
+      <article class="karakter-kart">
+        <div class="img-wrapper">
+          <img src="img/inumaki.jpg" alt="Toge Inumaki" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <h3>Toge Inumaki</h3>
+          <div class="info-tag">
+            <strong>Unvan</strong> Lanetli Söz Kullanıcısı
+          </div>
+          <div class="info-tag">
+            <strong>Teknik</strong> Lanetli Konuşma
+          </div>
+          <p class="hikaye">Kelimeleriyle insanları ve lanetleri kontrol edebilir. Güvenliği için sadece pirinç topu malzemeleriyle (Somon, Ton balığı) konuşur.</p>
         </div>
       </article>
       
-      <article class="karakter-kart">
-        <img src="img/utahime.jpg" alt="Utahime" width="100" height="300"/>
-        <div>
-          <h3>Utahime Iori</h3>
-          <p><strong>Unvan:</strong> Jujutsu Okulu Öğretmeni</p>
-          <p><strong>Teknik:</strong> Lanet Enerjisi Manipülasyonu</p>
-          <p><strong>Hikaye:</strong> Utahime, Jujutsu Okulu'nda öğretmenlik yapar ve öğrencilerine rehberlik eder. Güçlü bir büyücü olmasının yanı sıra, karakteri ve liderlik yetenekleri ile de tanınır.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/kenjaku.jpg" alt="Kenjaku" width="100" height="300"/>
-        <div>
-          <h3>Kenjaku</h3>
-          <p><strong>Unvan:</strong> Lanetli Büyücü</p>
-          <p><strong>Teknik:</strong> Beden Değiştirme</p>
-          <p><strong>Hikaye:</strong> Kenjaku, Jujutsu Kaisen evreninde önemli bir antagonist olarak öne çıkar. Beden değiştirme yeteneği ile düşmanlarını manipüle eder ve karmaşık planlar kurar.</p>
-        </div>
-
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/naoya.jpg" alt="Naoya Zenin" width="100" height="300"/>
-        <div>
-          <h3>Naoya Zenin</h3>
-          <p><strong>Unvan:</strong> Zenin Klanı Vârisi</p>
-          <p><strong>Teknik:</strong> Projeksiyon Büyüsü</p>
-          <p><strong>Hikaye:</strong> Naoya, Zenin klanının kibirli ve hırslı bir üyesidir. Güçlü teknikleri ve acımasız kişiliğiyle dikkat çeker. Klan içindeki güç mücadelesinde önemli bir rol oynar.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/yuta.jpg" alt="Yuta Okkotsu" width="100" height="300"/>
-        <div>
-          <h3>Yuta Okkotsu</h3>
-          <p><strong>Unvan:</strong> Özel Sınıf Büyücü</p>
-          <p><strong>Teknik:</strong> Lanetli Enerji Kopyalama, Rika'nın Gücü</p>
-          <p><strong>Hikaye:</strong> Yuta, Jujutsu Kaisen 0'ın ana karakteridir. Rika'nın lanetiyle birlikte olağanüstü bir güce sahiptir. Güçlü sezgileri ve kararlılığı ile öne çıkar.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/todo.jpg" alt="Aoi Todo" width="100" height="300"/>
-        <div>
-          <h3>Aoi Todo</h3>
-          <p><strong>Unvan:</strong> Kyoto Jujutsu Lisesi Öğrencisi</p>
-          <p><strong>Teknik:</strong> Boogie Woogie (Yer Değiştirme Tekniği)</p>
-          <p><strong>Hikaye:</strong> Aoi Todo, fiziksel gücü ve sıra dışı kişiliğiyle tanınır. Dövüşte zekası ve teknikleriyle rakiplerine üstünlük sağlar. Yuji ile olan dostluğu ve "zevk testleri" ile ünlüdür.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/kinji.jpg" alt="Kinji Hakari" width="100" height="300"/>
-        <div>
-          <h3>Kinji Hakari</h3>
-          <p><strong>Unvan:</strong> Kyoto Jujutsu Lisesi Öğrencisi</p>
-          <p><strong>Teknik:</strong> Sonsuz Enerji Döngüsü</p>
-          <p><strong>Hikaye:</strong> Kinji, Kyoto Jujutsu Lisesi'nin en güçlü öğrencilerinden biridir. Sonsuz enerji döngüsü tekniği ile savaşlarda büyük avantaj sağlar. Eğlenceli ve enerjik kişiliği ile dikkat çeker.</p>
-        </div>
-
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/mei.jpg" alt="Mei Mei" width="100" height="300"/>
-        <div>
-          <h3>Mei Mei</h3>
-          <p><strong>Unvan:</strong> Büyücü ve Bilim İnsanı</p>
-          <p><strong>Teknik:</strong> Lanetli Nesne Manipülasyonu</p>
-          <p><strong>Hikaye:</strong> Mei Mei, büyücülük dünyasında hem bilimsel hem de pratik bilgisi ile tanınır. Lanetli nesneleri manipüle etme yeteneği ile savaşlarda önemli bir rol oynar.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/kurourushi.jpg" alt="Kurourushi" width="100" height="300"/>
-        <div>
-          <h3>Kurourushi</h3>
-          <p><strong>Unvan:</strong> Lanetli Varlık</p>
-          <p><strong>Teknik:</strong> Lanet Enerjisi Manipülasyonu</p>
-          <p><strong>Hikaye:</strong> Kurourushi, Jujutsu Kaisen evreninde önemli bir lanetli varlıktır. Lanet enerjisini manipüle ederek düşmanlarına karşı büyük tehdit oluşturur.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/yuki.jpg" alt="Yuki Tsukumo" width="100" height="300"/>
-        <div>
-          <h3>Yuki Tsukumo</h3>
-          <p><strong>Unvan:</strong> Özel Sınıf Büyücü</p>
-          <p><strong>Teknik:</strong> Kütle Manipülasyonu</p>
-          <p><strong>Hikaye:</strong> Yuki, nadir özel sınıf büyücülerden biridir. Bağımsız ve özgür ruhlu yapısıyla bilinir. Jujutsu topluluğunun dışında kalmayı tercih eder ve güçlü idealleri vardır.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/shoko.jpg" alt="Shoko Ieiri" width="100" height="300"/>
-        <div>
-          <h3>Shoko Ieiri</h3>
-          <p><strong>Unvan:</strong> Jujutsu Okulu Doktoru</p>
-          <p><strong>Teknik:</strong> Ters Lanet Enerjisi</p>
-          <p><strong>Hikaye:</strong> Shoko, Jujutsu Okulu'nun baş doktorudur. Ters lanet enerjisiyle iyileştirme konusunda uzmandır ve büyücüler için hayati bir rol oynar.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/kamo.jpg" alt="Noritoshi Kamo" width="100" height="300"/>
-        <div>
-          <h3>Noritoshi Kamo</h3>
-          <p><strong>Unvan:</strong> Kamo Klanı Vârisi</p>
-          <p><strong>Teknik:</strong> Kan Manipülasyonu</p>
-          <p><strong>Hikaye:</strong> Noritoshi, Kyoto Jujutsu Lisesi'nin önde gelen öğrencilerindendir. Kamo klanının gururunu taşır ve ailesinin beklentilerini karşılamak için çabalar.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/momo.jpg" alt="Momo Nishimiya" width="100" height="300"/>
-        <div>
-          <h3>Momo Nishimiya</h3>
-          <p><strong>Unvan:</strong> Kyoto Jujutsu Lisesi Öğrencisi</p>
-          <p><strong>Teknik:</strong> Uçan Süpürge Manipülasyonu</p>
-          <p><strong>Hikaye:</strong> Momo, Kyoto ekibinin önemli üyelerindendir. Uçan süpürgesiyle havada hareket edebilir ve takımına stratejik avantaj sağlar.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/mai.jpg" alt="Mai Zenin" width="100" height="300"/>
-        <div>
-          <h3>Mai Zenin</h3>
-          <p><strong>Unvan:</strong> Zenin Klanı Üyesi</p>
-          <p><strong>Teknik:</strong> Yapılandırılmış Lanet Enerjisi (Tabanca Kullanımı)</p>
-          <p><strong>Hikaye:</strong> Mai, Maki'nin ikiz kardeşidir. Klan baskısı altında büyümüş ve silah kullanımıyla öne çıkmıştır. Kardeşiyle karmaşık bir ilişkisi vardır.</p>
-        </div>
-      </article>
-
-      <article class="karakter-kart">
-        <img src="img/toji.jpg" alt="Toji Fushiguro" width="100" height="300"/>
-        <div>
-          <h3>Toji Fushiguro</h3>
-          <p><strong>Unvan:</strong> Hayalet Katil</p>
-          <p><strong>Teknik:</strong> Fiziksel Üstünlük, Lanetli Silahlar Kullanımı</p>
-          <p><strong>Hikaye:</strong> Toji, Zenin klanından dışlanmış ve lanet enerjisine sahip olmayan nadir bir büyücü avcısıdır. Olağanüstü fiziksel yetenekleri ve ölümcül silahlarıyla tanınır. Megumi Fushiguro'nun babasıdır ve geçmişiyle hikayede önemli bir rol oynar.</p>
-        </div>
-      </article>
-    </div>
+      </div>
   </section>
 
   <footer>
     <p>&copy; 2025 Jujutsu Kaisen Haber Merkezi - Tüm hakları saklıdır | Hazırlayan: Eren</p>
   </footer>
+
+  <script>
+    // Arama kutusunu ve tüm kartları seç
+    const searchInput = document.getElementById('searchInput');
+    const characterCards = document.querySelectorAll('.karakter-kart');
+
+    // Her tuşa basıldığında çalışır
+    searchInput.addEventListener('keyup', function(event) {
+      const searchTerm = event.target.value.toLowerCase(); // Yazılanı küçük harfe çevir
+
+      characterCards.forEach(card => {
+        const name = card.querySelector('h3').innerText.toLowerCase(); // Karttaki ismi al
+        
+        // Eğer aranan kelime isimde geçiyorsa göster, yoksa gizle
+        if (name.includes(searchTerm)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  </script>
+
 </body>
 </html>
