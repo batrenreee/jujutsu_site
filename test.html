@@ -2,139 +2,230 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <title>Jujutsu Kaisen Karakter Testi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Karakter Testi | Jujutsu Kaisen Haber Merkezi</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
+
   <style>
+    /* --- Temel Ayarlar --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #0a0a0a;
-      color: #ffffff;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(to bottom, #0f0f0f, #1a1a1a);
+      color: #f2f2f2;
+      line-height: 1.6;
+      min-height: 100vh;
     }
 
+    /* --- Header & Nav (Diğer sayfalarla uyumlu) --- */
     header {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('img/sukuna.jpg') no-repeat center center/cover;
+      padding: 80px 20px;
       text-align: center;
-      padding: 40px;
-      background-image: 
-    radial-gradient(circle, rgba(255,59,59,0.6), rgba(10,10,10,0.8)),
-    url('img/sukuna.jpg');
-      background-size: cover;
-      background-position: center;
       color: white;
-      box-shadow: 0 0 20px #ff3b3b;
+      border-bottom: 4px solid #ff4747;
+      background-attachment: fixed; /* Parallax efekti */
     }
-
-
     header h1 {
-      font-size: 3em;
-      text-shadow: 0 0 10px #ff3b3b;
-      margin: 0;
+      font-size: 3rem;
+      font-weight: 800;
+      text-shadow: 2px 2px 15px rgba(255, 71, 71, 0.8);
+      margin-bottom: 10px;
     }
+    header p { color: #ddd; font-size: 1.2rem; }
 
     nav {
-      background: #111111;
+      background: #111;
       display: flex;
       justify-content: center;
       gap: 30px;
       padding: 15px 0;
-      box-shadow: 0 3px 6px rgba(255, 59, 59, 0.6);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
-
     nav a {
       color: #f2f2f2;
       text-decoration: none;
       font-weight: 600;
-      transition: color 0.3s ease;
+      transition: all 0.3s ease;
+      padding: 5px 12px;
+      border-radius: 4px;
     }
+    nav a:hover { background-color: #ff4747; color: #000; }
 
-    nav a:hover {
-      color: #ff3b3b;
-      text-shadow: 0 0 8px #ff3b3b;
-    }
-
+    /* --- Test Konteyner --- */
     .container {
       max-width: 800px;
-      margin: 30px auto;
-      padding: 20px;
-      background-color: #111111;
+      margin: 40px auto;
+      padding: 30px;
+      background: #1e1e1e;
       border-radius: 20px;
-      box-shadow: 0 0 20px #ff3b3b;
+      border: 1px solid #333;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
     }
 
-    form label {
-      display: block;
-      margin-top: 20px;
-      font-weight: bold;
+    /* --- Sorular --- */
+    .question-block {
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+    .question-title {
+      font-size: 1.3rem;
+      color: #ff4747;
+      margin-bottom: 15px;
+      font-weight: 800;
+      border-left: 4px solid #fff;
+      padding-left: 10px;
     }
 
-    form select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 8px;
-      border: none;
-      background-color: #1e1e1e;
-      color: #fff;
-      font-size: 1em;
+    /* --- Seçenekler (Radyo Butonları Gizle, Label'ı Özelleştir) --- */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    /* Gerçek radio butonunu gizle */
+    input[type="radio"] {
+      display: none;
     }
 
-    form button {
-      width: 100%;
-      margin-top: 30px;
+    /* Label Görünümü (Buton gibi) */
+    .option-label {
+      background: #2a2a2a;
       padding: 15px;
-      font-size: 16px;
-      border: none;
-      background-color: #ff3b3b;
-      color: black;
-      font-weight: bold;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 0 15px #ff3b3b;
-      transition: background-color 0.3s, box-shadow 0.3s;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      font-weight: 600;
     }
 
-    form button:hover {
-      background-color: #cc2f2f;
-      box-shadow: 0 0 20px #cc2f2f;
+    .option-label:hover {
+      background: #333;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 71, 71, 0.2);
     }
 
-    table {
+    /* Seçili Olduğunda */
+    input[type="radio"]:checked + .option-label {
+      background: #ff4747;
+      color: white;
+      border-color: #fff;
+      box-shadow: 0 0 20px rgba(255, 71, 71, 0.6);
+    }
+
+    /* --- Gönder Butonu --- */
+    .submit-btn {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 50px;
-      color: #fff;
+      padding: 18px;
+      font-size: 1.2rem;
+      background: linear-gradient(45deg, #ff4747, #d63030);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 1px;
+    }
+    .submit-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 30px rgba(255, 71, 71, 0.5);
     }
 
-    th, td {
-      padding: 12px;
-      border: 1px solid #ff3b3b;
+    /* --- Loading Alanı --- */
+    #loading {
+      display: none;
       text-align: center;
+      padding: 40px;
     }
-
-    th {
-      background-color: #2c0a0a;
-      color: #ff3b3b;
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #333;
+      border-top: 5px solid #ff4747;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px auto;
     }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    caption {
-      font-size: 20px;
+    /* --- Sonuç Alanı --- */
+    #resultArea {
+      display: none;
+      text-align: center;
+      animation: zoomIn 0.5s ease;
+    }
+    .result-card {
+      background: #252525;
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px solid #ff4747;
+      box-shadow: 0 0 50px rgba(255, 71, 71, 0.3);
+    }
+    .result-img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #ff4747;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(255, 71, 71, 0.5);
+    }
+    .result-title {
+      font-size: 2.5rem;
+      color: #ff4747;
       margin-bottom: 10px;
-      color: #ff3b3b;
+      font-weight: 800;
+    }
+    .result-desc {
+      color: #ccc;
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+    .restart-btn {
+      background: transparent;
+      border: 2px solid #fff;
+      color: #fff;
+      padding: 10px 25px;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 20px;
+      transition: all 0.3s;
+    }
+    .restart-btn:hover {
+      background: #fff;
+      color: #000;
     }
 
-    .result {
+    /* Animasyonlar */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    /* Footer */
+    footer {
+      background: #111;
       text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #777;
+      border-top: 1px solid #333;
       margin-top: 40px;
-      font-size: 1.6em;
-      font-weight: bold;
-      color: #ffd700;
-      text-shadow: 0 0 8px #ffd700;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Jujutsu Kaisen Testi</h1>
+    <h1>Hangi Karakterisin?</h1>
+    <p>İçindeki Lanet Enerjisini Keşfet</p>
   </header>
 
   <nav>
@@ -145,155 +236,218 @@
   </nav>
 
   <div class="container">
+    
     <form id="testForm">
-      <label>1. En güçlü yönün hangisi?</label>
-      <select name="q1" required>
-        <option value="Zeka">Zeka</option>
-        <option value="Sadakat">Sadakat</option>
-        <option value="Güç">Güç</option>
-        <option value="Çılgınlık">Çılgınlık</option>
-      </select>
+      
+      <div class="question-block" style="animation-delay: 0.1s;">
+        <div class="question-title">1. En güçlü yönün hangisi?</div>
+        <div class="options-grid">
+          <label>
+            <input type="radio" name="q1" value="Gojo" required>
+            <div class="option-label">Zeka & Özgüven</div>
+          </label>
+          <label>
+            <input type="radio" name="q1" value="Itadori">
+            <div class="option-label">Fiziksel Güç & Sadakat</div>
+          </label>
+          <label>
+            <input type="radio" name="q1" value="Sukuna">
+            <div class="option-label">Kaos & Yıkım</div>
+          </label>
+          <label>
+            <input type="radio" name="q1" value="Megumi">
+            <div class="option-label">Strateji & Potansiyel</div>
+          </label>
+        </div>
+      </div>
 
-      <label>2. Takımda hangi rolü alırsın?</label>
-      <select name="q2" required>
-        <option value="Lider">Lider</option>
-        <option value="Destek">Destek</option>
-        <option value="Stratejist">Stratejist</option>
-        <option value="Ön cephe">Ön cephe</option>
-      </select>
+      <div class="question-block" style="animation-delay: 0.2s;">
+        <div class="question-title">2. Takımda hangi rolü üstlenirsin?</div>
+        <div class="options-grid">
+          <label>
+            <input type="radio" name="q2" value="Gojo" required>
+            <div class="option-label">Mutlak Lider (Tek Başına Ordu)</div>
+          </label>
+          <label>
+            <input type="radio" name="q2" value="Megumi">
+            <div class="option-label">Taktiksel Destek</div>
+          </label>
+          <label>
+            <input type="radio" name="q2" value="Itadori">
+            <div class="option-label">Ön Cephe Savaşçısı</div>
+          </label>
+          <label>
+            <input type="radio" name="q2" value="Nobara">
+            <div class="option-label">Agresif Saldırı</div>
+          </label>
+        </div>
+      </div>
 
-      <label>3. Savaş stilin nedir?</label>
-      <select name="q3" required>
-        <option value="Alan kontrolü">Alan kontrolü</option>
-        <option value="Yakın dövüş">Yakın dövüş</option>
-        <option value="Uzaktan saldırı">Uzaktan saldırı</option>
-        <option value="Kaotik saldırı">Kaotik saldırı</option>
-      </select>
+      <div class="question-block" style="animation-delay: 0.3s;">
+        <div class="question-title">3. Zor bir durumla karşılaştığında...</div>
+        <div class="options-grid">
+          <label>
+            <input type="radio" name="q3" value="Sukuna" required>
+            <div class="option-label">Eğlenirim, rakibi ezerim.</div>
+          </label>
+          <label>
+            <input type="radio" name="q3" value="Gojo">
+            <div class="option-label">Rahat davranırım, hallederim.</div>
+          </label>
+          <label>
+            <input type="radio" name="q3" value="Itadori">
+            <div class="option-label">Sevdiklerimi korumak için ölürüm.</div>
+          </label>
+          <label>
+            <input type="radio" name="q3" value="Megumi">
+            <div class="option-label">Plan yapar, risk alırım.</div>
+          </label>
+        </div>
+      </div>
 
-      <label>4. Zor durumda ne yaparsın?</label>
-      <select name="q4" required>
-        <option value="Soğukkanlı kalırım">Soğukkanlı kalırım</option>
-        <option value="Risk alırım">Risk alırım</option>
-        <option value="Takımı korurum">Takımı korurum</option>
-        <option value="Rakibi psikolojik çökertirim">Rakibi psikolojik çökertirim</option>
-      </select>
+      <div class="question-block" style="animation-delay: 0.4s;">
+        <div class="question-title">4. Senin için "Güç" nedir?</div>
+        <div class="options-grid">
+          <label>
+            <input type="radio" name="q4" value="Sukuna" required>
+            <div class="option-label">İstediğin her şeyi yapabilmek.</div>
+          </label>
+          <label>
+            <input type="radio" name="q4" value="Nobara">
+            <div class="option-label">Kendin olabilmek.</div>
+          </label>
+          <label>
+            <input type="radio" name="q4" value="Gojo">
+            <div class="option-label">Zayıfları koruyabilmek.</div>
+          </label>
+          <label>
+            <input type="radio" name="q4" value="Megumi">
+            <div class="option-label">İnsanları kurtarabilmek.</div>
+          </label>
+        </div>
+      </div>
 
-      <label>5. Favori renk?</label>
-      <select name="q5" required>
-        <option value="Mavi">Mavi</option>
-        <option value="Kırmızı">Kırmızı</option>
-        <option value="Siyah">Siyah</option>
-        <option value="Beyaz">Beyaz</option>
-      </select>
+      <div class="question-block" style="animation-delay: 0.5s;">
+        <div class="question-title">5. Hangi renk seni yansıtır?</div>
+        <div class="options-grid">
+          <label>
+            <input type="radio" name="q5" value="Gojo" required>
+            <div class="option-label">Mavi / Mor (Sonsuzluk)</div>
+          </label>
+          <label>
+            <input type="radio" name="q5" value="Sukuna">
+            <div class="option-label">Kan Kırmızısı</div>
+          </label>
+          <label>
+            <input type="radio" name="q5" value="Megumi">
+            <div class="option-label">Gölge Siyahı</div>
+          </label>
+          <label>
+            <input type="radio" name="q5" value="Itadori">
+            <div class="option-label">Turuncu / Siyah</div>
+          </label>
+        </div>
+      </div>
 
-      <button type="submit">Sonucu Göster</button>
+      <button type="submit" class="submit-btn">ALAN GENİŞLET: SONUCU GÖR</button>
     </form>
 
-    <div id="result" class="result"></div>
+    <div id="loading">
+      <div class="loader"></div>
+      <h3>Lanet Enerjisi Hesaplanıyor...</h3>
+      <p style="color:#777;">Ruhun analiz ediliyor.</p>
+    </div>
 
-    <table>
-      <caption>📊 Karakter Özellikleri</caption>
-      <tr>
-        <th>Karakter</th>
-        <th>Güç</th>
-        <th>Zeka</th>
-        <th>Sadakat</th>
-        <th>Tehlike</th>
-      </tr>
-      <tr>
-        <td>Gojo Satoru</td>
-        <td>10/10</td>
-        <td>9/10</td>
-        <td>8/10</td>
-        <td>⚠️ Yüksek</td>
-      </tr>
-      <tr>
-        <td>Itadori Yuji</td>
-        <td>8/10</td>
-        <td>7/10</td>
-        <td>10/10</td>
-        <td>Orta</td>
-      </tr>
-      <tr>
-        <td>Megumi Fushiguro</td>
-        <td>7/10</td>
-        <td>9/10</td>
-        <td>9/10</td>
-        <td>Düşük</td>
-      </tr>
-      <tr>
-        <td>Nobara Kugisaki</td>
-        <td>6/10</td>
-        <td>8/10</td>
-        <td>7/10</td>
-        <td>Orta</td>
-      </tr>
-      <tr>
-        <td>Sukuna</td>
-        <td>10/10</td>
-        <td>10/10</td>
-        <td>1/10</td>
-        <td>☠️ Aşırı</td>
-      </tr>
-    </table>
+    <div id="resultArea">
+      <div class="result-card">
+        <img src="" alt="Karakter Resmi" class="result-img" id="resImg">
+        <h2 class="result-title" id="resName">Karakter Adı</h2>
+        <p class="result-desc" id="resDesc">Karakter Açıklaması buraya gelecek.</p>
+        <button class="restart-btn" onclick="location.reload()">Tekrar Test Et ↻</button>
+      </div>
+    </div>
+
   </div>
 
+  <footer>
+    <p>&copy; 2025 Jujutsu Kaisen Haber Merkezi - Tüm hakları saklıdır | Hazırlayan: Eren</p>
+  </footer>
+
   <script>
+    // Karakter Verileri (Resim yollarının doğru olduğundan emin ol)
+    const charactersData = {
+      "Gojo": {
+        name: "Satoru Gojo",
+        img: "img/gojo.jpg",
+        desc: "Sen mutlak güçsün! Kendine güvenin tavan yapmış durumda ama bunun altını doldurabiliyorsun. Biraz gevşek görünebilirsin ama sevdiklerin için dünyayı yakarsın. Sonsuzluk senin elinde!"
+      },
+      "Sukuna": {
+        name: "Ryomen Sukuna",
+        img: "img/sukuna.jpg",
+        desc: "Sen Lanetlerin Kralısın! Kurallar umurunda değil, sadece kendi zevkine ve gücüne bakıyorsun. Kaostan besleniyorsun ve etrafındakiler senin gücünden korkuyor."
+      },
+      "Itadori": {
+        name: "Yuji Itadori",
+        img: "img/yuji.jpg",
+        desc: "Senin kalbin altından! Fiziksel gücün inanılmaz ama asıl gücün sarsılmaz iraden ve sadakatin. Arkadaşların için her türlü acıya göğüs gerebilirsin."
+      },
+      "Megumi": {
+        name: "Megumi Fushiguro",
+        img: "img/megumi.jpg",
+        desc: "Potansiyelin sınırsız! Sessiz, sakin ve stratejiksin. Gereksiz riskleri sevmezsin ama yeri geldiğinde gölgelerin içinden çıkan bir canavara dönüşebilirsin."
+      },
+      "Nobara": {
+        name: "Nobara Kugisaki",
+        img: "img/nobara.jpg",
+        desc: "Sen sert ve havalısın! Kendin olmaktan asla taviz vermiyorsun. Çekiç ve çivilerinle düşmanlarına korku salarken, dostlarına karşı oldukça koruyucusun."
+      }
+    };
+
     document.getElementById('testForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
+      // Puanlama Sistemi
       const formData = new FormData(this);
-      const answers = Array.from(formData.values());
+      const scores = { "Gojo": 0, "Sukuna": 0, "Itadori": 0, "Megumi": 0, "Nobara": 0 };
 
-      const scores = {
-        "Gojo Satoru": 0,
-        "Itadori Yuji": 0,
-        "Megumi Fushiguro": 0,
-        "Nobara Kugisaki": 0,
-        "Sukuna": 0
-      };
-
-      // Puanlama kuralları
-      answers.forEach(answer => {
-        switch (answer) {
-          case "Zeka":
-          case "Alan kontrolü":
-          case "Mavi":
-          case "Lider":
-            scores["Gojo Satoru"] += 2;
-            break;
-
-          case "Sadakat":
-          case "Yakın dövüş":
-          case "Kırmızı":
-          case "Takımı korurum":
-            scores["Itadori Yuji"] += 2;
-            break;
-
-          case "Stratejist":
-          case "Soğukkanlı kalırım":
-          case "Siyah":
-          case "Uzaktan saldırı":
-            scores["Megumi Fushiguro"] += 2;
-            break;
-
-          case "Risk alırım":
-          case "Rakibi psikolojik çökertirim":
-          case "Beyaz":
-            scores["Nobara Kugisaki"] += 2;
-            break;
-
-          case "Çılgınlık":
-          case "Kaotik saldırı":
-            scores["Sukuna"] += 2;
-            break;
+      for (let value of formData.values()) {
+        if(scores[value] !== undefined) {
+          scores[value]++;
         }
-      });
+      }
 
-      // En yüksek puanlı karakteri bul
-      const [character, score] = Object.entries(scores).reduce((max, curr) => curr[1] > max[1] ? curr : max);
+      // En yüksek puanı alanı bul
+      let maxScore = -1;
+      let winner = "Itadori"; // Varsayılan
 
-      document.getElementById('result').innerText = `🎯 En çok benzediğin karakter: ${character}`;
+      for (const [char, score] of Object.entries(scores)) {
+        if (score > maxScore) {
+          maxScore = score;
+          winner = char;
+        }
+      }
+
+      // Animasyon Akışı
+      const form = document.getElementById('testForm');
+      const loading = document.getElementById('loading');
+      const resultArea = document.getElementById('resultArea');
+
+      // 1. Formu gizle, Loading'i göster
+      form.style.display = 'none';
+      loading.style.display = 'block';
+
+      // 2. 2 saniye bekle, sonucu göster
+      setTimeout(() => {
+        loading.style.display = 'none';
+        
+        // Sonuç verilerini doldur
+        document.getElementById('resName').innerText = charactersData[winner].name;
+        document.getElementById('resImg').src = charactersData[winner].img;
+        document.getElementById('resDesc').innerText = charactersData[winner].desc;
+        
+        resultArea.style.display = 'block';
+      }, 2000);
+
     });
   </script>
 
