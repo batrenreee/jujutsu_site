@@ -5,83 +5,46 @@
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![GitHub Pages](https://img.shields.io/badge/github%20pages-121013?style=for-the-badge&logo=github&logoColor=white)
 
-**[İngilizce açıklama aşağıda | Scroll down for English]**
-
 ---
 
-## 🔥 Proje Hakkında
+## 🔥 About the Project
 
-Bu proje, popüler anime/manga serisi **Jujutsu Kaisen** için geliştirilmiş, modern ve etkileşimli bir hayran sitesidir. Başlangıçta statik bir proje olarak başlasa da, yapılan güncellemelerle **Canlı Arama**, **Mantıksal Karakter Testi** ve **CSS Animasyonları** gibi dinamik özellikler eklenmiştir.
+This is a modern, interactive fan website dedicated to the acclaimed anime and manga series, **Jujutsu Kaisen**. Originally launched as a static HTML project, it has been upgraded to "Special Grade" with dynamic features such as **Live Search**, a **Logic-Based Character Quiz**, and **Advanced CSS Animations**.
 
-Site tasarımı, serinin karanlık ve kaotik atmosferini yansıtacak şekilde "Dark Mode" odaklı hazırlanmış ve kırmızı/mor "Lanetli Enerji" efektleriyle süslenmiştir.
+The design carefully reflects the dark, chaotic atmosphere of the series. It features a "Dark Mode" aesthetic, enhanced by red and purple "Cursed Energy" visual effects.
 
-## 🚀 Canlı Demo
+## 🚀 Live Demo
 
-👉 **[Siteyi Ziyaret Et (Domain Expansion)](https://batrenreee.github.io/jujutsu_site)**
+👉 **[Expand Domain (Visit the Website)](https://batrenreee.github.io/jujutsu_site)**
 
-## ⚡ Özellikler
+## ⚡ Key Features
 
-* **Dinamik Karakter Arama:** Karakterler sayfasında anlık filtreleme yapan JavaScript tabanlı arama motoru.
-* **İnteraktif Karakter Testi:** Puanlama mantığına dayalı, yükleme animasyonlu ve görsel sonuç veren gelişmiş test.
-* **Manga Okuma Listesi:** Bölüm takibi için şık kart tasarımları ve yönlendirmeler.
-* **Görsel Efektler:** Kartların üzerine gelindiğinde (Hover) çalışan zoom, parlama ve gölge efektleri.
-* **Responsive Tasarım:** Mobil, tablet ve masaüstü uyumlu esnek yapı.
+* **Dynamic Character Search:** A JavaScript-powered search engine that filters characters in real-time.
+* **Interactive Character Quiz:** A logic-based assessment featuring a scoring system, custom loading animations, and highly visual result cards.
+* **Manga Archive:** Stylish UI card layouts designed for tracking the latest manga chapters.
+* **Visual Effects:** Smooth transitions, zoom interactions, and signature "Cursed Energy" hover effects.
+* **Responsive Design:** Fully optimized for seamless viewing across mobile, tablet, and desktop devices.
 
-## 🛠️ Kullanılan Teknolojiler
+## 🛠️ Tech Stack
 
-* **HTML5:** Semantik yapı (Header, Nav, Main, Article).
-* **CSS3:** Flexbox, Grid, Keyframe Animasyonları, Gradientler.
-* **JavaScript (ES6+):** DOM Manipülasyonu, Event Listener, Mantıksal Algoritmalar.
+* **HTML5:** Semantic structuring (Header, Nav, Main, Article).
+* **CSS3:** Flexbox, Grid System, Keyframe Animations, and Custom Gradients.
+* **JavaScript (ES6+):** DOM Manipulation, Event Listeners, and Logic Algorithms.
 
-## 📸 Ekran Görüntüleri
+## 📸 Screenshots
 
-| Ana Sayfa | Karakter Testi (Sonuç Ekranı) |
-|-----------|----------------|
+| Home Page | Quiz Page (Result Screen) |
+|:---:|:---:|
 | ![home](./home.png) | ![test](./test.png) |
 
 ---
 
-## 🇬🇧 English Description
-
-### 🔥 Project Summary
-
-This is a modern, interactive fan website dedicated to the **Jujutsu Kaisen** anime/manga series. While it started as a static HTML project, it has been upgraded to "Special Grade" with dynamic features like **Live Search**, **Logic-based Quiz**, and **Advanced CSS Animations**.
-
-The design reflects the dark and chaotic atmosphere of the series, featuring a "Dark Mode" aesthetic with red/purple "Cursed Energy" visual effects.
-
-### 🚀 Live Demo
-
-👉 **[Visit the Website](https://batrenreee.github.io/jujutsu_site)**
-
-### ⚡ Key Features
-
-* **Dynamic Character Search:** JavaScript-powered search bar that filters characters in real-time.
-* **Interactive Character Quiz:** A logic-based quiz with scoring system, loading animations, and visual result cards.
-* **Manga Archive:** Stylish card layouts for tracking latest manga chapters.
-* **Visual Effects:** "Cursed Energy" hover effects, zoom interactions, and smooth transitions.
-* **Responsive Design:** Fully optimized for mobile, tablet, and desktop devices.
-
-### 🛠️ Tech Stack
-
-* **HTML5:** Semantic structure.
-* **CSS3:** Flexbox, Grid System, Animations.
-* **JavaScript (ES6+):** DOM Manipulation, Logic Algorithms.
-
-### 📸 Screenshots
-
-| Home Page | Quiz Page |
-|-----------|-----------|
-| ![home](./home.png) | ![test](./test.png) |
-
----
-
-## 👤 Geliştirici / Developer
+## 👤 Developer
 
 **Eren** 📧 GitHub: [@batrenreee](https://github.com/batrenreee)
 
 ---
 
-## 📌 Lisans / License
+## 📌 License
 
-Bu proje sadece eğitim ve eğlence amaçlıdır.  
-This project is for educational and entertainment purposes only.
+This project is created for educational and entertainment purposes only. All Jujutsu Kaisen assets and properties belong to their respective creators and publishers.
