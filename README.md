@@ -15,7 +15,7 @@ The design carefully reflects the dark, chaotic atmosphere of the series. It fea
 
 ## 🚀 Live Demo
 
-👉 **[Expand Domain (Visit the Website)](https://batrenreee.github.io/jujutsu_site)**
+👉 **[(Visit the Website)](https://batrenreee.github.io/jujutsu_site)**
 
 ## ⚡ Key Features
 
