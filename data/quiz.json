@@ -1,0 +1,139 @@
+{
+  "questions": [
+    {
+      "q": "En güçlü yönün hangisi?",
+      "options": [
+        { "label": "Zekâ & Sınırsız Özgüven", "value": "Gojo" },
+        { "label": "Saf Fiziksel Güç & İçgüdü", "value": "Toji" },
+        { "label": "Kaos, Yıkım & Acımasızlık", "value": "Sukuna" },
+        { "label": "Strateji & Gizli Potansiyel", "value": "Megumi" },
+        { "label": "Azim & Silah Ustalığı", "value": "Maki" },
+        { "label": "Devasa Enerji & Sevgi", "value": "Yuta" }
+      ]
+    },
+    {
+      "q": "Takımda hangi rolü üstlenirsin?",
+      "options": [
+        { "label": "Mutlak Lider (Tek Başına Ordu)", "value": "Gojo" },
+        { "label": "Bağımsız Çalışan / Paralı Asker", "value": "Toji" },
+        { "label": "Ön Cephe Savaşçısı (Tank)", "value": "Itadori" },
+        { "label": "Agresif ve Beklenmedik Saldırı", "value": "Nobara" },
+        { "label": "Kitle Kontrol & Tarikat Lideri", "value": "Geto" },
+        { "label": "Güvenilir Profesyonel (İş Bitirici)", "value": "Nanami" }
+      ]
+    },
+    {
+      "q": "Zor bir durumla karşılaştığında tepkin ne olur?",
+      "options": [
+        { "label": "Eğlenirim, rakibi ezip geçerim.", "value": "Sukuna" },
+        { "label": "Rahat davranırım, nasılsa hallederim.", "value": "Gojo" },
+        { "label": "Sevdiklerimi korumak için her şeyimi veririm.", "value": "Yuta" },
+        { "label": "İşi kurallara göre hızlıca bitirip eve dönerim.", "value": "Nanami" },
+        { "label": "Bana bu iş için ne kadar ödeyeceklerine bakarım.", "value": "Toji" }
+      ]
+    },
+    {
+      "q": "Senin için 'Güç' kavramı ne ifade ediyor?",
+      "options": [
+        { "label": "İstediğin her şeyi yapabilme özgürlüğü.", "value": "Sukuna" },
+        { "label": "Sana çizilen kaderi ve kuralları yıkıp geçmek.", "value": "Maki" },
+        { "label": "Kendi büyük ideallerini gerçekleştirecek otorite.", "value": "Geto" },
+        { "label": "Zayıfları koruyabilmek ve sistemi değiştirmek.", "value": "Gojo" },
+        { "label": "Sadece kendin olabilmek ve taviz vermemek.", "value": "Nobara" }
+      ]
+    },
+    {
+      "q": "Savaşta ilk hamlen ne olur?",
+      "options": [
+        { "label": "Mesafeyi kontrol eder, üstünlüğü elime alırım.", "value": "Gojo" },
+        { "label": "Doğrudan ve acımasızca en ölümcül vuruşu yaparım.", "value": "Toji" },
+        { "label": "Hizmetkârlarımı/Lanetlerimi öne sürer, analiz yaparım.", "value": "Geto" },
+        { "label": "Rakibin zayıf noktasını bulup plan kurarım.", "value": "Megumi" },
+        { "label": "En sert yumruğumu atıp kavgayı başlatırım.", "value": "Itadori" }
+      ]
+    },
+    {
+      "q": "Hayattaki en büyük motivasyonun nedir?",
+      "options": [
+        { "label": "Bana 'yapamazsın' diyen herkese kim olduğumu göstermek.", "value": "Maki" },
+        { "label": "Dünyanın dengesini kökünden değiştirmek.", "value": "Gojo" },
+        { "label": "Sadece kendi zevkim ve can sıkıntımı gidermek.", "value": "Sukuna" },
+        { "label": "Mesaim bittiğinde rahatça dinlenebilmek.", "value": "Nanami" },
+        { "label": "Sevdiğim insanlara layık olmak ve onları yaşatmak.", "value": "Yuta" }
+      ]
+    },
+    {
+      "q": "Hangi renk veya tema seni daha çok yansıtır?",
+      "options": [
+        { "label": "Mavi / Mor (Sonsuzluk)", "value": "Gojo" },
+        { "label": "Kan Kırmızısı (Katliam)", "value": "Sukuna" },
+        { "label": "Koyu Yeşil / Siyah (Para ve Gölgeler)", "value": "Toji" },
+        { "label": "Beyaz / Gümüş (Saf Enerji)", "value": "Yuta" },
+        { "label": "Hardal Sarısı / Gri (Kurumsal Ciddiyet)", "value": "Nanami" },
+        { "label": "Altın / Lacivert (İdeoloji)", "value": "Geto" }
+      ]
+    },
+    {
+      "q": "Düşmanına karşı tutumun nasıldır?",
+      "options": [
+        { "label": "Onlarla alay eder, ezici gücümü gösteririm.", "value": "Sukuna" },
+        { "label": "Soğukkanlılıkla işlerini bitiririm, gereksiz konuşmam.", "value": "Toji" },
+        { "label": "Eğer ideallerime terslerse onları ortadan kaldırırım.", "value": "Geto" },
+        { "label": "Onları anlamaya çalışsam da görevimi yaparım.", "value": "Itadori" },
+        { "label": "Beni hafife almalarını sağlar, sonra şok ederim.", "value": "Nobara" }
+      ]
+    }
+  ],
+  "results": {
+    "Gojo": {
+      "name": "Satoru Gojo",
+      "img": "img/characters/gojo.webp",
+      "desc": "Sen mutlak güçsün! Kendine güvenin tavan yapmış durumda ama bunun altını fazlasıyla doldurabiliyorsun. Biraz gevşek görünebilirsin ama sevdiklerin ve doğru bildiklerin için dünyayı yakarsın. Sonsuzluk senin ellerinde!"
+    },
+    "Sukuna": {
+      "name": "Ryomen Sukuna",
+      "img": "img/characters/sukuna.webp",
+      "desc": "Sen Lanetlerin Kralı'sın! Kurallar, ahlak veya başkalarının ne düşündüğü zerre umurunda değil. Sadece kendi zevkine ve gücüne bakıyorsun. Kaostan besleniyorsun ve etrafındakiler senin salt gücünden korkuyor."
+    },
+    "Toji": {
+      "name": "Toji Fushiguro",
+      "img": "img/characters/toji.webp",
+      "desc": "Sen bir hayatta kalma uzmanısın! Kurallar, lanetler veya büyü umurunda değil; sen sadece saf fiziksel yeteneğin, zekân ve silahlarınla tanrıları bile dize getirebilirsin. Son derece pragmatiksin ve her şeyin bir bedeli olduğuna inanırsın."
+    },
+    "Yuta": {
+      "name": "Yuta Okkotsu",
+      "img": "img/characters/yuta.webp",
+      "desc": "İçinde taşıdığın sevgi en büyük gücün! Dışarıdan naif, kibar ve sessiz görünebilirsin ama sevdiklerine zarar gelirse içinde uyanan o karanlık canavarı kimse durduramaz. Sınırsız bir potansiyelin var."
+    },
+    "Maki": {
+      "name": "Maki Zenin",
+      "img": "img/characters/maki.webp",
+      "desc": "Sen gerçek bir isyankârsın! Sana 'yapamazsın' diyen herkese, seni küçümseyen sisteme inat, sadece kendi azminle ve çelik gibi iradenle zirveye tırmanıyorsun. Silahlarla aran mükemmel ve asla boyun eğmiyorsun."
+    },
+    "Geto": {
+      "name": "Suguru Geto",
+      "img": "img/characters/geto.webp",
+      "desc": "Senin için büyük resim her şeyden önemli! İdeallerin uğruna en zor kararları almaktan çekinmiyorsun. Liderlik vasfın çok yüksek ve zekanla insanları (veya lanetleri) kendi etrafında toplamayı çok iyi biliyorsun."
+    },
+    "Nanami": {
+      "name": "Kento Nanami",
+      "img": "img/characters/nanami.webp",
+      "desc": "Sen aklın ve mantığın sesisin! Fazla mesaiyi hiç sevmiyorsun, sorumluluklarının farkındasın ve her zaman işini en temiz, en kuralına uygun şekilde yapıp bitirmeye odaklısın. Olgun ve etrafındakiler için son derece güvenilir birisin."
+    },
+    "Itadori": {
+      "name": "Yuji Itadori",
+      "img": "img/characters/yuji.webp",
+      "desc": "Senin kalbin altından! Fiziksel gücün inanılmaz ama asıl gücün sarsılmaz iraden, empatin ve sadakatin. Arkadaşların ve doğru olanı yapmak için her türlü acıya göğüs gerebilirsin."
+    },
+    "Megumi": {
+      "name": "Megumi Fushiguro",
+      "img": "img/characters/megumi.webp",
+      "desc": "Potansiyelin sınır tanımıyor! Sessiz, sakin ve analitiksin. Gereksiz riskleri sevmezsin ama yeri geldiğinde sevdiklerin için gölgelerin içinden çıkan kontrolsüz bir canavara dönüşebilirsin."
+    },
+    "Nobara": {
+      "name": "Nobara Kugisaki",
+      "img": "img/characters/nobara.webp",
+      "desc": "Sen sert, bağımsız ve inanılmaz havalısın! Kendin olmaktan, kendi tarzından asla taviz vermiyorsun. Çekiç ve çivilerinle düşmanlarına acımasızca korku salarken, dostlarına karşı oldukça koruyucusundur."
+    }
+  }
+}

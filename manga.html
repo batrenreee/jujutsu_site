@@ -1,331 +1,82 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Manga Arşivi | Jujutsu Kaisen Haber Merkezi</title>
-  <meta name="description" content="Jujutsu Kaisen manga bölümleri ve analizleri">
-  <meta name="author" content="Eren">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JJK Merkez — Manga Kütüphanesi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body data-page="manga">
+    <div id="topbar"></div>
 
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-
-  <style>
-    /* --- Temel Ayarlar --- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Outfit', sans-serif;
-      background: linear-gradient(to bottom, #0f0f0f, #1a1a1a);
-      color: #f2f2f2;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* --- Header --- */
-    header {
-      /* Header görselini biraz daha manga paneli havasına soktuk */
-      background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.6)), url('img/gojo.jpg') no-repeat center center/cover;
-      padding: 100px 20px;
-      text-align: center;
-      color: white;
-      border-bottom: 4px solid #ff4747;
-    }
-    header h1 {
-      font-size: 3.5rem;
-      font-weight: 800;
-      text-shadow: 2px 2px 15px rgba(255, 71, 71, 0.6);
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-    }
-    header p {
-      color: #ccc;
-      font-size: 1.2rem;
-    }
-
-    /* --- Navigasyon --- */
-    nav {
-      background: #111;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 30px;
-      padding: 15px 0;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    nav a {
-      color: #f2f2f2;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      padding: 5px 12px;
-      border-radius: 4px;
-    }
-    nav a:hover {
-      background-color: #ff4747;
-      color: #000;
-    }
-
-    /* --- Ana İçerik --- */
-    main {
-      max-width: 1000px; /* Okuma rahatlığı için genişliği biraz daralttık */
-      margin: 40px auto;
-      padding: 20px;
-      flex: 1;
-    }
-    
-    section {
-      margin-bottom: 60px;
-    }
-
-    section h2 {
-      font-size: 2.2rem;
-      margin-bottom: 30px;
-      border-left: 6px solid #ff4747;
-      padding-left: 15px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* --- Manga Kart Tasarımı --- */
-    .manga-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .manga-card {
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 12px;
-      display: flex;
-      align-items: stretch; /* İçindekilerin boyunu eşitle */
-      overflow: hidden;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    /* Hover Efekti */
-    .manga-card:hover {
-      transform: translateX(10px); /* Sağa doğru hafif kayma */
-      box-shadow: -5px 5px 20px rgba(255, 71, 71, 0.2);
-      border-color: #ff4747;
-    }
-
-    /* Sol Taraftaki Bölüm Numarası Alanı */
-    .chapter-badge {
-      background: #2a2a2a;
-      min-width: 100px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-right: 1px solid #333;
-      color: #ff4747;
-    }
-    .chapter-badge span {
-      font-size: 0.9rem;
-      color: #777;
-    }
-    .chapter-badge strong {
-      font-size: 2rem;
-      font-weight: 800;
-    }
-
-    /* İçerik Alanı */
-    .card-content {
-      padding: 20px;
-      flex: 1;
-    }
-    .card-content h3 {
-      font-size: 1.4rem;
-      margin-bottom: 8px;
-      color: #fff;
-    }
-    .card-content .date {
-      font-size: 0.85rem;
-      color: #888;
-      margin-bottom: 10px;
-      display: block;
-    }
-    .card-content p {
-      color: #ccc;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    /* Sağdaki Buton Alanı */
-    .card-action {
-      display: flex;
-      align-items: center;
-      padding-right: 20px;
-    }
-    .read-btn {
-      background-color: transparent;
-      border: 2px solid #ff4747;
-      color: #ff4747;
-      padding: 10px 20px;
-      text-decoration: none;
-      font-weight: 800;
-      border-radius: 30px;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-    .manga-card:hover .read-btn {
-      background-color: #ff4747;
-      color: #fff;
-    }
-
-    /* Yeni Etiketi */
-    .new-tag {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background: #ff4747;
-      color: white;
-      font-size: 0.7rem;
-      font-weight: 800;
-      padding: 2px 8px;
-      border-bottom-left-radius: 8px;
-    }
-
-    /* --- Footer --- */
-    footer {
-      background: #111;
-      text-align: center;
-      padding: 30px 20px;
-      font-size: 0.9rem;
-      color: #777;
-      border-top: 1px solid #333;
-    }
-
-    /* Mobil Düzenleme */
-    @media (max-width: 768px) {
-      .manga-card {
-        flex-direction: column;
-      }
-      .chapter-badge {
-        flex-direction: row;
-        gap: 10px;
-        padding: 10px;
-        border-right: none;
-        border-bottom: 1px solid #333;
-        width: 100%;
-      }
-      .card-action {
-        padding: 0 20px 20px 20px;
-        justify-content: flex-start;
-      }
-      .read-btn {
-        width: 100%;
-        text-align: center;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <h1>Manga Arşivi</h1>
-    <p>Son bölümler, analizler ve teoriler</p>
-  </header>
-
-  <nav>
-    <a href="index.html">Ana Sayfa</a>
-    <a href="manga.html">Manga</a>
-    <a href="karakterler.html">Karakterler</a>
-    <a href="test.html">Karakter Testi</a>
-  </nav>
-
-  <main>
-    <section>
-      <h2>🔥 Son Bölümler</h2>
-      
-      <div class="manga-list">
-        
-        <article class="manga-card">
-          <div class="new-tag">YENİ</div>
-          <div class="chapter-badge">
-            <span>BÖLÜM</span>
-            <strong>262</strong>
-          </div>
-          <div class="card-content">
-            <h3>Büyük Şok: Alanın İçinde</h3>
-            <span class="date">📅 10 Temmuz 2025</span>
-            <p>Gojo'nun Sukuna ile olan savaşı tüm seriyi salladı. Bu bölümde yaşananlar hayranları derinden etkiledi. Gojo'nun akıbeti hala belirsizken, yeni güçler ortaya çıkmaya başladı.</p>
-          </div>
-          <div class="card-action">
-            <a href="https://sadscans.com/reader/66620538b4670" target="_blank" class="read-btn">OKU &rarr;</a>
-          </div>
-        </article>
-
-        <article class="manga-card">
-          <div class="chapter-badge">
-            <span>BÖLÜM</span>
-            <strong>261</strong>
-          </div>
-          <div class="card-content">
-            <h3>Sırlar ve Savaşlar</h3>
-            <span class="date">📅 3 Temmuz 2025</span>
-            <p>Megumi ve Yuji’nin karşı karşıya geldiği bu bölüm, yoğun aksiyon sahneleri ve sürpriz gelişmeler içeriyor. Karakterlerin motivasyonları derinleşiyor.</p>
-          </div>
-          <div class="card-action">
-            <a href="https://sadscans.com/reader/665078fc745cb" target="_blank" class="read-btn">OKU &rarr;</a>
-          </div>
-        </article>
-
-        <article class="manga-card">
-          <div class="chapter-badge">
-            <span>BÖLÜM</span>
-            <strong>260</strong>
-          </div>
-          <div class="card-content">
-            <h3>Karanlık Gölgeler</h3>
-            <span class="date">📅 26 Haziran 2025</span>
-            <p>Kara büyücüler ve lanetler arasındaki mücadele şiddetleniyor. Bu bölümde geçmişe dair sırlar açığa çıkıyor.</p>
-          </div>
-          <div class="card-action">
-            <a href="https://sadscans.com/reader/66479bb064fe9" target="_blank" class="read-btn">OKU &rarr;</a>
-          </div>
-        </article>
-
+    <section class="manga-library-hero">
+      <div class="manga-hero-copy">
+        <span class="manga-eyebrow">Gege Akutami'nin tamamlanmış ana serisi</span>
+        <h1>Lanetlerin<br />Kütüphanesi</h1>
+        <p>Cilt 0'dan finale kadar bütün Jujutsu Kaisen koleksiyonunu sırayla keşfet, ilerlemeni kaydet ve resmî kaynaktan okumaya devam et.</p>
+        <div class="manga-hero-actions">
+          <button class="btn" id="openMangaPlus">MANGA Plus'ta Oku</button>
+          <button class="btn btn-outline" id="openVizReader">VIZ Okuyucu</button>
+        </div>
+      </div>
+      <div class="manga-hero-books" aria-hidden="true">
+        <img src="img/manga/volume-00.jpg" alt="" />
+        <img src="img/manga/volume-15.jpg" alt="" />
+        <img src="img/manga/volume-30.jpg" alt="" />
       </div>
     </section>
 
-    <section>
-      <h2>🧠 Özel Analizler</h2>
-      
-      <div class="manga-list">
-        <article class="manga-card" style="border-left: 4px solid #fff;">
-          <div class="chapter-badge" style="background: #222;">
-            <span style="font-size: 2rem;">?</span>
+    <main class="manga-library-main">
+      <section class="section manga-library-section">
+        <div class="manga-library-heading">
+          <div>
+            <span class="manga-section-index">Koleksiyon 00–30</span>
+            <h2>Bütün Ciltler</h2>
+            <p>Kapaklara göre sırala, aradığın cildi bul ve kaldığın yeri cihazında sakla.</p>
           </div>
-          <div class="card-content">
-            <h3>Gojo’nun Gücü ve Geleceği</h3>
-            <span class="date">📝 İnceleme - 1 Temmuz 2025</span>
-            <p>Gojo Satoru'nun güçlerinin derinlemesine analizi ve bu güçlerin ilerleyen bölümlerde hikayeye etkileri üzerine detaylı bir inceleme.</p>
+          <div class="manga-progress-ring" id="mangaProgressRing" aria-label="Okuma ilerlemesi">
+            <strong>0%</strong><span>tamamlandı</span>
           </div>
-          <div class="card-action">
-            <a href="https://jujutsu--kaisen-fandom-com.translate.goog/wiki/Satoru_Gojo?_x_tr_sl=en&_x_tr_tl=tr" target="_blank" class="read-btn">İNCELE &rarr;</a>
+        </div>
+
+        <div class="tracker-stats manga-stats" id="trackerStats"></div>
+
+        <div class="manga-toolbar" aria-label="Manga filtreleri">
+          <label class="manga-search">
+            <span aria-hidden="true">⌕</span>
+            <input id="mangaSearch" type="search" placeholder="Cilt, bölüm veya hikâye dönemi ara…" autocomplete="off" />
+          </label>
+          <div class="manga-filters" id="mangaFilters">
+            <button class="chip selected" data-filter="all">Tümü</button>
+            <button class="chip" data-filter="unread">Okunmadı</button>
+            <button class="chip" data-filter="read">Okundu</button>
           </div>
-        </article>
-      </div>
+          <button class="chip manga-reset" id="resetTracker">İlerlemeyi sıfırla</button>
+        </div>
 
-    </section>
-  </main>
+        <div class="volume-grid" id="volumeGrid">
+          <p class="empty">Kütüphane hazırlanıyor…</p>
+        </div>
 
-  <footer>
-    <p>&copy; 2025 Jujutsu Kaisen Haber Merkezi - Tüm hakları saklıdır | Hazırlayan: Eren</p>
-  </footer>
+        <div class="official-reading-note">
+          <span class="official-badge">RESMÎ OKUMA</span>
+          <div>
+            <strong>Mangayı güvenli ve yasal kaynaktan oku.</strong>
+            <p>Uygulama manga sayfalarını kopyalamaz. Her cildin “Önizle” düğmesi VIZ sayfasını, “Okumaya devam et” düğmesi ise bölgenizde kullanılabilen resmî okuyucuyu açar.</p>
+          </div>
+        </div>
+      </section>
+    </main>
 
-</body>
+    <div class="modal-overlay" id="mangaModal" aria-hidden="true">
+      <div class="modal manga-volume-modal"></div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="js/app.js"></script>
+    <script src="js/manga.js"></script>
+  </body>
 </html>

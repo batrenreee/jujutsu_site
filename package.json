@@ -1,0 +1,9 @@
+{
+  "name": "jujutsu-site",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "news:update": "node scripts/update-news-feed.mjs"
+  }
+}
