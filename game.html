@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JJK Merkez — Lanet Düellosu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body data-page="game">
+    <div id="topbar"></div>
+
+    <section class="hero feature-hero game-feature-hero">
+      <div class="feature-hero-scene" aria-hidden="true">
+        <img class="feature-wallpaper" src="img/wallpapers/duel-hero.jpg" alt="" />
+      </div>
+      <span class="feature-kicker">Alanını genişlet</span>
+      <h1>Lanet Düellosu</h1>
+      <p>1v1 piksel dövüş — içindeki büyücüyü serbest bırak</p>
+    </section>
+
+    <main>
+      <div class="game-wrap">
+        <div class="stage-holder">
+          <canvas id="game" class="game-stage" width="480" height="270"></canvas>
+
+          <!-- Karakter seçim ekranı (JS doldurur) -->
+          <div id="selectScreen" class="game-overlay"></div>
+
+          <!-- Sonuç ekranı -->
+          <div id="resultScreen" class="game-overlay hidden"></div>
+        </div>
+
+        <!-- Ekran kontrolleri (fare/dokunma ile oynanır) -->
+        <div id="touchControls">
+          <div class="pad-left">
+            <button class="gbtn" data-key="KeyA">◄</button>
+            <button class="gbtn" data-key="KeyW">▲ Zıpla</button>
+            <button class="gbtn" data-key="KeyD">►</button>
+          </div>
+          <div class="pad-right">
+            <button class="gbtn atk" data-key="KeyJ">Yumruk</button>
+            <button class="gbtn atk" data-key="KeyK">Tekme</button>
+            <button class="gbtn sp" data-key="KeyL">★ Özel</button>
+          </div>
+        </div>
+
+        <div class="controls-help">
+          <span><b>1. Oyuncu:</b> A/D hareket · W zıpla · J yumruk · K tekme · L özel</span>
+          <span><b>2. Oyuncu:</b> ◄/► hareket · ▲ zıpla · N yumruk · M tekme · , özel</span>
+          <span class="hint">İpucu: Özel saldırı için alttaki enerji çubuğunun dolması gerekir.</span>
+          <button class="btn btn-outline" id="musicToggle" style="margin:8px auto 0;max-width:200px">♪ Müzik: Açık</button>
+          <span class="hint">Kendi şarkını çalmak istersen <b>music/bgm.mp3</b> dosyasını ekle; varsa otomatik çalar.</span>
+        </div>
+      </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="js/app.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/game.js"></script>
+  </body>
+</html>

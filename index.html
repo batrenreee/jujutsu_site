@@ -1,270 +1,90 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jujutsu Kaisen Haber Merkezi</title>
-  <meta name="description" content="Jujutsu Kaisen anime ve manga haberleri" />
-  <meta name="author" content="Eren" />
-  <meta property="og:title" content="Jujutsu Kaisen Haber Merkezi" />
-  <meta property="og:description" content="Jujutsu Kaisen anime ve manga dünyasından en güncel haberler!" />
-  <meta property="og:image" content="img/gojo.jpg" />
-  <meta property="og:type" content="website" />
-  <meta name="keywords" content="jujutsu kaisen, gojo, yuji, anime haberleri, manga güncellemeleri" />
-  
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JJK Merkez — Haber Merkezi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body data-page="home">
+    <div id="topbar"></div>
 
-  <style>
-    /* Temel Ayarlar */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Outfit', sans-serif;
-      background: linear-gradient(to bottom, #0f0f0f, #1a1a1a);
-      color: #f2f2f2;
-      line-height: 1.6;
-      margin: 0;
-      overflow-x: hidden; /* Yatay kaydırmayı engelle */
-    }
-
-    /* Header & Video Alanı */
-    header {
-      position: relative;
-      height: 400px;
-      overflow: hidden;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    header video#bg-video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
-      transform: translate(-50%, -50%);
-      object-fit: cover;
-      filter: brightness(0.4);
-      z-index: -1;
-      pointer-events: none;
-    }
-    header h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      text-shadow: 2px 2px 10px #000;
-      opacity: 0;
-      animation: fadeInDown 1.5s forwards;
-      padding: 0 10px;
-    }
-    header p {
-      margin-top: 10px;
-      font-size: 1.2rem;
-      color: #ccc;
-      text-shadow: 1px 1px 5px #000;
-    }
-
-    @keyframes fadeInDown {
-      0% {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Navigasyon Menüsü */
-    nav {
-      background: #111;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap; /* Mobilde sığmazsa alt satıra geçsin */
-      gap: 30px;
-      padding: 15px 0;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.6);
-      position: sticky; /* Menüyü yukarı sabitle */
-      top: 0;
-      z-index: 1000;
-    }
-    nav a {
-      color: #f2f2f2;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
-    nav a:hover {
-      color: #111;
-      background-color: #ff4747; /* Hover'da arka plan değişimi */
-    }
-
-    /* Ana İçerik Alanı */
-    main {
-      text-align: center;
-      padding: 60px 20px;
-      animation: fadeIn 2s ease;
-      min-height: 60vh; /* Footer'ı aşağı itmek için */
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    section {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    section h2 {
-      font-size: 2.2rem;
-      margin-bottom: 35px;
-      border-left: 6px solid #ff4747;
-      padding-left: 15px;
-      text-align: left; /* Başlığı sola hizaladık */
-    }
-
-    /* Haber Kartları */
-    .card {
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 12px;
-      margin-bottom: 30px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      text-align: left; /* Kart içi metinleri sola hizala */
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-    
-    /* Lanetli Enerji Efekti (Hover) */
-    .card:hover {
-      transform: translateY(-5px);
-      /* Kırmızı ve Mor karışımı Sukuna tarzı parlama */
-      box-shadow: 0 5px 20px rgba(255, 71, 71, 0.5), 0 0 40px rgba(128, 0, 128, 0.3);
-      border: 1px solid #ff4f4f;
-    }
-
-    .card img {
-      width: 100%;
-      height: 250px; /* Görseller eşit boyda dursun */
-      object-fit: cover;
-    }
-    .card-content {
-      padding: 25px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 10px;
-    }
-    .card h3 a {
-      color: #ff4747;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .card h3 a:hover {
-      color: #fff;
-      text-decoration: underline;
-    }
-    .card p {
-      color: #ccc;
-      margin-bottom: 8px;
-    }
-
-    /* Footer */
-    footer {
-      background: #111;
-      text-align: center;
-      padding: 30px 20px;
-      font-size: 0.9rem;
-      color: #777;
-      border-top: 1px solid #333;
-    }
-
-    /* Mobil Uyumluluk */
-    @media (min-width: 768px) {
-      .card {
-        flex-direction: row;
-        height: 250px; /* Masaüstünde sabit yükseklik */
-      }
-      .card img {
-        width: 350px;
-        height: 100%;
-      }
-      .card-content {
-        flex: 1;
-      }
-      header h1 {
-        font-size: 4rem;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <video autoplay muted loop playsinline id="bg-video" poster="img/home.png">
-      <source src="videos/jujutsu-kaisen.mp4" type="video/mp4" />
-      Tarayıcınız video etiketini desteklemiyor.
-    </video>
-    <h1>Jujutsu Kaisen</h1>
-    <p>En güncel anime ve manga haberleri</p>
-  </header>
-
-  <nav>
-    <a href="index.html">Ana Sayfa</a>
-    <a href="manga.html">Manga</a>
-    <a href="karakterler.html">Karakterler</a>
-    <a href="test.html">Karakter Testi</a>
-  </nav>
-
-  <main>
-    <section>
-      <h2>Son Haberler</h2>
-
-      <article class="card">
-        <img src="img/gojo.jpg" alt="Gojo Satoru Manga Sahnesi" loading="lazy" />
-        <div class="card-content">
-          <h3><a href="https://www-cbr-com.translate.goog/jjk-chapter-262-review/?_x_tr_sl=en&_x_tr_tl=tr" target="_blank" rel="noopener noreferrer">Gojo Geri Döndü Mü? Manga 262 Büyük Şok!</a></h3>
-          <p><strong>Tarih:</strong> 11 Temmuz 2025</p>
-          <p>Hayranlar, Gojo'nun Sukuna ile olan savaşında mucize arıyor. 262. bölümdeki son sahne olay yarattı. Gerçekten yaşıyor mu? Teoriler burada.</p>
+    <main class="home-page">
+      <section class="home-hero" id="featuredStory">
+        <video autoplay muted loop playsinline poster="img/opening.jpg" aria-hidden="true">
+          <source src="videos/jujutsu-kaisen.mp4" type="video/mp4" />
+        </video>
+        <div class="home-hero-shade"></div>
+        <div class="home-hero-content">
+          <span class="live-pill"><i></i> JJK GÜNDEMİ</span>
+          <div class="featured-meta" id="featuredMeta">Güncel haberler yükleniyor…</div>
+          <h1 id="featuredTitle">Jujutsu Kaisen Haber Merkezi</h1>
+          <p id="featuredExcerpt">Anime, manga, oyun ve etkinlik dünyasındaki gelişmeleri Türkçe özetlerle tek yerde takip et.</p>
+          <div class="featured-actions">
+            <button class="btn" id="readFeatured" disabled>Haberi oku <span>→</span></button>
+            <a class="btn btn-glass" href="#latestNews">Tüm haberler</a>
+          </div>
         </div>
-      </article>
-
-      <article class="card">
-        <img src="img/opening.jpg" alt="Jujutsu Kaisen Season 3 Opening" loading="lazy" />
-        <div class="card-content">
-          <h3><a href="https://gamerant.com/jujutsu-kaisen-season-3-new-release-date-update-anime-expo-2025/" target="_blank" rel="noopener noreferrer">3. Sezon Açılışı Yayında! MAPPA Yine Coşturdu</a></h3>
-          <p><strong>Tarih:</strong> 5 Temmuz 2025</p>
-          <p>Yeni opening hem müzik hem görsellik açısından beklentiyi karşıladı. Şarkının ismi, animasyon geçişleri ve detaylar için tıklayın.</p>
+        <div class="hero-status">
+          <span>SON GÜNCELLEME</span>
+          <strong id="feedUpdatedAt">Haberler hazırlanıyor</strong>
+          <small id="feedStatus">Yerel haber arşivi yükleniyor</small>
         </div>
-      </article>
+      </section>
 
-      <article class="card">
-        <img src="img/yuji.jpg" alt="Yuji Itadori Black Flash" loading="lazy" />
-        <div class="card-content">
-          <h3><a href="https://jujutsu--kaisen-fandom-com.translate.goog/wiki/Episode_35?_x_tr_sl=en&_x_tr_tl=tr" target="_blank" rel="noopener noreferrer">Yuji’nin Gücü Artıyor: Bölüm 35 İncelemesi</a></h3>
-          <p><strong>Tarih:</strong> 30 Haziran 2025</p>
-          <p>Black Flash sahnesiyle Yuji herkesi şaşırttı. Bölüm sonunda ise Megumi ile ilgili yeni ipuçları verildi.</p>
+      <section class="ticker" aria-label="Gündem başlıkları">
+        <strong>GÜNDEM</strong>
+        <div class="ticker-track" id="tickerTrack"><span>Haberler hazırlanıyor…</span></div>
+      </section>
+
+      <section class="home-dashboard">
+        <div class="dashboard-stat"><span class="stat-icon">◉</span><div><strong id="newsTotal">—</strong><small>toplam haber</small></div></div>
+        <div class="dashboard-stat"><span class="stat-icon">▤</span><div><strong id="categoryTotal">—</strong><small>gündem kategorisi</small></div></div>
+        <div class="dashboard-stat"><span class="stat-icon">☆</span><div><strong id="savedTotal">0</strong><small>okuma listende</small></div></div>
+        <div class="dashboard-links">
+          <a href="karakterler.html"><span>Karakter Vikisi</span><b>129 profili incele →</b></a>
+          <a href="manga.html"><span>Manga Rehberi</span><b>Arkları takip et →</b></a>
         </div>
-      </article>
-      
-    </section>
-  </main>
+      </section>
 
-  <footer>
-    <p>&copy; 2025 Jujutsu Kaisen Haber Merkezi - Tüm hakları saklıdır | Hazırlayan: Eren</p>
-  </footer>
+      <section class="news-section" id="latestNews">
+        <header class="news-section-head">
+          <div><span class="section-kicker">HABER AKIŞI</span><h2>Son gelişmeler</h2><p>Bir habere tıklayarak uygulamadan ayrılmadan ayrıntılı Türkçe özetini okuyabilirsin.</p></div>
+          <div class="news-head-actions">
+            <div class="feed-state" id="feedState"><i></i><span>Akış hazırlanıyor</span></div>
+            <button class="news-refresh" id="newsRefresh" type="button" aria-label="Haberleri şimdi yenile"><span>↻</span> Haberleri yenile</button>
+            <div class="news-search-wrap"><span>⌕</span><input id="newsSearch" type="search" placeholder="Haberlerde ara…" autocomplete="off" /></div>
+          </div>
+        </header>
 
-</body>
+        <div class="news-toolbar">
+          <div class="news-categories" id="newsCategories"></div>
+          <select class="select" id="newsSort" aria-label="Haber sıralaması">
+            <option value="newest">En yeni</option>
+            <option value="oldest">En eski</option>
+            <option value="shortest">Kısa okuma</option>
+          </select>
+        </div>
+
+        <div class="news-layout">
+          <div class="news-feed" id="newsGrid"><p class="empty">Haberler yükleniyor…</p></div>
+          <aside class="news-sidebar">
+            <section class="sidebar-card"><div class="sidebar-title"><span>Öne çıkanlar</span><b>Bu hafta</b></div><div id="trendingList"></div></section>
+            <section class="sidebar-card source-card"><span class="source-mark">✓</span><h3>Kaynak şeffaflığı</h3><p>Haber özetleri resmî Jujutsu Kaisen kanalları ve güvenilir yayınlardan hazırlanır. Her haber maddesinde asıl kaynağa erişebilirsin.</p></section>
+            <section class="sidebar-card quick-card"><h3>Hızlı erişim</h3><a href="karakterler.html">Karakterleri keşfet <span>→</span></a><a href="test.html">Karakter testini çöz <span>→</span></a><a href="game.html">Lanet düellosu oyna <span>→</span></a></section>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal-overlay news-reader-overlay" id="newsModal" role="dialog" aria-modal="true" aria-label="Haber detayı">
+      <article class="modal news-reader"></article>
+    </div>
+
+    <div id="footer"></div>
+    <script src="js/app.js"></script>
+    <script src="js/news.js"></script>
+  </body>
 </html>

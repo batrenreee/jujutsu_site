@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-14T14:13:07.307Z",
+  "sources": [
+    {
+      "name": "Crunchyroll News",
+      "url": "https://cr-news-api-service.prd.crunchyrollsvc.com/v1/en-US/rss"
+    },
+    {
+      "name": "Anime News Network",
+      "url": "https://www.animenewsnetwork.com/all/rss.xml?ann-edition=us"
+    },
+    {
+      "name": "MyAnimeList News",
+      "url": "https://myanimelist.net/rss/news.xml"
+    }
+  ],
+  "items": [
+    {
+      "id": "live-5cafac8baa61c8",
+      "title": "Jujutsu Kaisen, Chainsaw Man, More Manga Rank on NYT July Bestseller List",
+      "date": "2026-07-13",
+      "publishedAt": "2026-07-13T13:15:00.000Z",
+      "category": "Manga",
+      "source": "Anime News Network",
+      "img": "img/characters/yuta.webp",
+      "excerpt": "Anime News Network, Jujutsu Kaisen ile ilgili yeni bir gelişme yayımladı. Ayrıntıları kaynak sayfasından doğrulayabilirsin.",
+      "readTime": 1,
+      "popularity": 89,
+      "url": "https://www.animenewsnetwork.com/daily-briefs/2026-07-13/jujutsu-kaisen-chainsaw-man-more-manga-rank-on-nyt-july-bestseller-list/.239538",
+      "auto": true,
+      "content": [
+        "Anime News Network, bu Jujutsu Kaisen gelişmesini 13 Temmuz 2026 tarihinde yayımladı.",
+        "Kaynağın özgün özeti: The 30th volume of Gege Akutami's Jujutsu Kaisen manga ranked at #3 on The New York Times' monthly Graphic Books and Manga bestseller list released in...",
+        "Bu madde otomatik canlı haber akışından alınmıştır. En güncel ve eksiksiz bilgi için aşağıdaki resmî kaynak düğmesini kullan."
+      ],
+      "highlights": [
+        "Otomatik canlı akış",
+        "Anime News Network",
+        "Kaynak bağlantısı doğrulandı"
+      ]
+    }
+  ]
+}
