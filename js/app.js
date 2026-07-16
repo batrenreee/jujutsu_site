@@ -114,8 +114,8 @@
     const topbarHost = document.querySelector("#topbar");
     if (topbarHost) {
       const links = NAV.map(
-        (n) =>
-          `<a href="${n.href}" class="${n.page === active ? "active" : ""}">${n.label}</a>`
+        (n, index) =>
+          `<a href="${n.href}" class="${n.page === active ? "active" : ""}"><small>0${index + 1}</small><span>${n.label}</span></a>`
       ).join("");
 
       const swatches = ACCENTS.map(
@@ -125,7 +125,7 @@
 
       topbarHost.outerHTML = `
         <header class="topbar">
-          <div class="brand"><span class="dot"></span> JJK Merkez</div>
+          <a class="brand" href="index.html" aria-label="JJK Merkez ana sayfa"><span class="brand-mark">呪</span><span class="brand-copy"><b>JJK</b><small>MERKEZ / DOSYA</small></span></a>
           <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menü">☰</button>
           <nav class="nav-links" id="navLinks">${links}</nav>
           <div class="topbar-actions">
