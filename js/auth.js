@@ -124,7 +124,7 @@
   async function login({ email, password }) {
     const cleanEmail = email.trim().toLocaleLowerCase("tr-TR");
     const account = await getAccountByEmail(cleanEmail);
-    if (!account) throw new Error("E-posta veya parola hatalı.");
+    if (!account) throw new Error("Bu cihazda bu e-postaya ait hesap bulunamadı. Masaüstü ve web hesapları henüz ortak bir sunucuda eşitlenmiyor.");
     const secret = await passwordHash(password, account.passwordSalt);
     if (!safeEqual(secret.hash, account.passwordHash)) throw new Error("E-posta veya parola hatalı.");
     account.lastLoginAt = new Date().toISOString();

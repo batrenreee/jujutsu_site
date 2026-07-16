@@ -46,25 +46,58 @@
     document.querySelector("#logoutAccount").addEventListener("click",JJKAuth.logout);
   }
 
-  function imageToAvatar(file){
-    return new Promise((resolve,reject)=>{
-      if(!/^image\/(jpeg|png|webp)$/.test(file.type)){reject(new Error("Yalnızca JPG, PNG veya WebP yükleyebilirsin."));return;}
-      if(file.size>8*1024*1024){reject(new Error("Görsel 8 MB'tan küçük olmalı."));return;}
-      const reader=new FileReader();
-      reader.onerror=()=>reject(new Error("Görsel okunamadı."));
-      reader.onload=()=>{
+  function bindAvatarCropper(input,select){
+    const overlay=document.querySelector("#avatarCropper"),canvas=document.querySelector("#avatarCropCanvas"),stage=canvas.closest(".avatar-crop-stage"),zoom=document.querySelector("#avatarZoom"),save=document.querySelector("#avatarCropSave"),error=document.querySelector("#avatarCropError"),ctx=canvas.getContext("2d");
+    const state={image:null,url:"",zoom:1,x:0,y:0,dragging:false,lastX:0,lastY:0};
+
+    function dimensions(){
+      if(!state.image)return null;
+      const base=Math.max(canvas.width/state.image.naturalWidth,canvas.height/state.image.naturalHeight),scale=base*state.zoom;
+      return {width:state.image.naturalWidth*scale,height:state.image.naturalHeight*scale};
+    }
+    function clampPosition(){
+      const size=dimensions(); if(!size)return;
+      const maxX=Math.max(0,(size.width-canvas.width)/2),maxY=Math.max(0,(size.height-canvas.height)/2);
+      state.x=Math.max(-maxX,Math.min(maxX,state.x)); state.y=Math.max(-maxY,Math.min(maxY,state.y));
+    }
+    function draw(){
+      const size=dimensions(); if(!size)return;
+      clampPosition(); ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(state.image,(canvas.width-size.width)/2+state.x,(canvas.height-size.height)/2+state.y,size.width,size.height);
+    }
+    function close(){
+      overlay.classList.remove("open");document.body.classList.remove("modal-open");input.value="";error.textContent="";
+      if(state.url)URL.revokeObjectURL(state.url); state.image=null;state.url="";
+    }
+    function open(file){
+      const looksLikeImage=file.type.startsWith("image/")||/\.(jpe?g|png|webp|gif|avif)$/i.test(file.name);
+      if(!looksLikeImage)throw new Error("Seçilen dosya bir görsel değil. JPG, PNG, WebP veya AVIF dene.");
+      if(file.size>15*1024*1024)throw new Error("Görsel 15 MB'tan küçük olmalı.");
+      if(state.url)URL.revokeObjectURL(state.url); state.url=URL.createObjectURL(file);
+      return new Promise((resolve,reject)=>{
         const image=new Image();
-        image.onerror=()=>reject(new Error("Görsel işlenemedi."));
-        image.onload=()=>{
-          const size=Math.min(image.naturalWidth,image.naturalHeight),x=(image.naturalWidth-size)/2,y=(image.naturalHeight-size)/2;
-          const canvas=document.createElement("canvas"); canvas.width=512; canvas.height=512;
-          canvas.getContext("2d").drawImage(image,x,y,size,size,0,0,512,512);
-          resolve(canvas.toDataURL("image/jpeg",.84));
-        };
-        image.src=reader.result;
-      };
-      reader.readAsDataURL(file);
+        image.onload=()=>{state.image=image;state.zoom=1;state.x=0;state.y=0;zoom.value="1";draw();overlay.classList.add("open");document.body.classList.add("modal-open");resolve();};
+        image.onerror=()=>{URL.revokeObjectURL(state.url);state.url="";reject(new Error("Bu görsel biçimi tarayıcı tarafından açılamadı. Fotoğrafı JPG, PNG veya WebP olarak yeniden kaydedip dene."));};
+        image.src=state.url;
+      });
+    }
+    zoom.addEventListener("input",()=>{state.zoom=Number(zoom.value);draw();});
+    canvas.addEventListener("pointerdown",event=>{state.dragging=true;state.lastX=event.clientX;state.lastY=event.clientY;stage.classList.add("dragging");canvas.setPointerCapture(event.pointerId);});
+    canvas.addEventListener("pointermove",event=>{if(!state.dragging)return;const ratio=canvas.width/canvas.getBoundingClientRect().width;state.x+=(event.clientX-state.lastX)*ratio;state.y+=(event.clientY-state.lastY)*ratio;state.lastX=event.clientX;state.lastY=event.clientY;draw();});
+    function stopDrag(){state.dragging=false;stage.classList.remove("dragging");}
+    canvas.addEventListener("pointerup",stopDrag);canvas.addEventListener("pointercancel",stopDrag);
+    document.querySelector("#avatarCropClose").addEventListener("click",close);document.querySelector("#avatarCropCancel").addEventListener("click",close);overlay.addEventListener("click",event=>{if(event.target===overlay)close();});
+    save.addEventListener("click",()=>{
+      save.disabled=true;save.textContent="Kaydediliyor…";error.textContent="";
+      canvas.toBlob(blob=>{
+        if(!blob){error.textContent="Kırpılmış görsel oluşturulamadı.";save.disabled=false;save.textContent="Fotoğrafı kaydet";return;}
+        const reader=new FileReader();
+        reader.onerror=()=>{error.textContent="Kırpılmış görsel okunamadı.";save.disabled=false;save.textContent="Fotoğrafı kaydet";};
+        reader.onload=async()=>{try{await JJKAuth.updateAccount({avatarDataUrl:reader.result});location.reload();}catch(caught){error.textContent=caught.message;save.disabled=false;save.textContent="Fotoğrafı kaydet";}};
+        reader.readAsDataURL(blob);
+      },"image/jpeg",.86);
     });
+    return open;
   }
 
   function bindAccountSettings(account,p){
@@ -78,11 +111,13 @@
     document.querySelector("#settingsJoined").textContent=new Date(account.createdAt).toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"});
     document.querySelector("#settingsEditProfile").addEventListener("click",()=>document.querySelector("#editProfile").click());
     select.addEventListener("click",()=>input.click());
+    const openCropper=bindAvatarCropper(input,select);
     input.addEventListener("change",async()=>{
       const file=input.files?.[0]; if(!file)return;
-      select.disabled=true; select.textContent="İşleniyor…";
-      try{const avatarDataUrl=await imageToAvatar(file);await JJKAuth.updateAccount({avatarDataUrl});location.reload();}
-      catch(error){JJK.toast(error.message);select.disabled=false;select.textContent="Fotoğraf seç";input.value="";}
+      select.disabled=true; select.textContent="Hazırlanıyor…";
+      try{await openCropper(file);}
+      catch(error){JJK.toast(error.message);input.value="";}
+      finally{select.disabled=false;select.textContent="Fotoğraf seç";}
     });
     remove.addEventListener("click",async()=>{remove.disabled=true;await JJKAuth.updateAccount({avatarDataUrl:""});location.reload();});
 

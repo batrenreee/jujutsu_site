@@ -37,7 +37,7 @@
             <span>01 // PROFİL FOTOĞRAFI</span>
             <div class="avatar-settings-preview" id="avatarPreview">呪</div>
             <div><h3>Dosya portresi</h3><p>JPG, PNG veya WebP. Görsel cihazda küçültülerek güvenli hesap veritabanına kaydedilir.</p></div>
-            <input id="avatarInput" type="file" accept="image/jpeg,image/png,image/webp" hidden />
+            <input id="avatarInput" type="file" accept="image/*" hidden />
             <div class="account-settings-actions"><button class="btn" id="avatarSelect" type="button">Fotoğraf seç</button><button class="settings-ghost" id="avatarRemove" type="button">Kaldır</button></div>
           </article>
           <article class="identity-settings-card">
@@ -61,6 +61,17 @@
         <label>Uzmanlık<select id="profileTitle"><option>Jujutsu Öğrencisi</option><option>Lanet Araştırmacısı</option><option>1. Sınıf Büyücü</option><option>Bariyer Uzmanı</option><option>Özel Sınıf Adayı</option></select></label>
         <button class="btn" type="submit">Dosyayı kaydet</button>
       </form>
+    </div>
+
+    <div class="modal-overlay" id="avatarCropper" role="dialog" aria-modal="true" aria-label="Profil fotoğrafını kırp">
+      <div class="modal avatar-crop-modal">
+        <button class="modal-close" id="avatarCropClose" type="button" aria-label="Kapat">×</button>
+        <span>PORTRE DÜZENLEYİCİ // 04</span><h2>Fotoğrafı Kırp</h2><p>Fotoğrafı sürükleyerek konumlandır, yakınlaştırma çubuğuyla kadrajı ayarla.</p>
+        <div class="avatar-crop-stage"><canvas id="avatarCropCanvas" width="512" height="512" aria-label="Profil fotoğrafı kırpma önizlemesi"></canvas><i></i></div>
+        <label class="avatar-zoom-label"><span>Yakınlaştır</span><input id="avatarZoom" type="range" min="1" max="3" step="0.01" value="1" /></label>
+        <p class="settings-message error" id="avatarCropError" role="alert"></p>
+        <div class="avatar-crop-actions"><button class="settings-ghost" id="avatarCropCancel" type="button">Vazgeç</button><button class="btn" id="avatarCropSave" type="button">Fotoğrafı kaydet</button></div>
+      </div>
     </div>
 
     <div id="footer"></div>
