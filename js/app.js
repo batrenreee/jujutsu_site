@@ -19,8 +19,15 @@
     { page: "manga", href: "manga.html", label: "Manga" },
     { page: "characters", href: "karakterler.html", label: "Karakterler" },
     { page: "quiz", href: "test.html", label: "Karakter Testi" },
+    { page: "technique", href: "teknik.html", label: "Teknik Üret" },
     { page: "game", href: "game.html", label: "Düello" },
+    { page: "profile", href: "profil.html", label: "Profil" },
   ];
+
+  const PAGE_ATMOSPHERE = {
+    home:{glyph:"呪",label:"JJK Merkez"}, manga:{glyph:"冊",label:"Manga Arşivi"}, characters:{glyph:"人",label:"Karakter Vikisi"},
+    quiz:{glyph:"魂",label:"Ruh Analizi"}, technique:{glyph:"術",label:"Teknik Laboratuvarı"}, game:{glyph:"領",label:"Lanet Düellosu"}, profile:{glyph:"印",label:"Büyücü Dosyası"}
+  };
 
   /* ---- Yardımcılar ---- */
   function hexToRgb(hex) {
@@ -113,7 +120,7 @@
 
     const topbarHost = document.querySelector("#topbar");
     if (topbarHost) {
-      const links = NAV.map(
+      const links = NAV.filter(n => n.page !== "profile").map(
         (n, index) =>
           `<a href="${n.href}" class="${n.page === active ? "active" : ""}"><small>0${index + 1}</small><span>${n.label}</span></a>`
       ).join("");
@@ -138,6 +145,14 @@
                 <button type="button" role="menuitemradio" data-theme-option="system"><span>◑</span><b>Sistem</b><small>Windows ile eşleş</small></button>
               </div>
             </div>
+            <div class="account-control" id="accountControl" hidden>
+              <button class="account-toggle" id="accountToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Hesap menüsü"><span class="account-avatar">呪</span><span class="account-toggle-copy"><b>Hesap</b><small>Profil menüsü</small></span><i>⌄</i></button>
+              <div class="account-menu" id="accountMenu" role="menu">
+                <div class="account-menu-head"><span class="account-avatar">呪</span><div><b>Yükleniyor…</b><small></small></div></div>
+                <a href="profil.html" role="menuitem"><span>印</span><div><b>Profilim</b><small>Dosya ve hesap ayarları</small></div><i>→</i></a>
+                <button id="accountLogout" type="button" role="menuitem"><span>×</span><div><b>Çıkış yap</b><small>Oturumu bu cihazda kapat</small></div><i>→</i></button>
+              </div>
+            </div>
           </div>
         </header>`;
     }
@@ -151,10 +166,27 @@
     }
   }
 
+  async function hydrateAccountControl() {
+    const control = document.querySelector("#accountControl");
+    if (!control || !window.JJKAuth) return;
+    const account = await JJKAuth.currentUser();
+    if (!account) return;
+    const initials = account.displayName.trim().split(/\s+/).slice(0,2).map(part => part[0]).join("").toLocaleUpperCase("tr-TR");
+    const avatar = account.avatarDataUrl ? `<img src="${escapeHtml(account.avatarDataUrl)}" alt="" />` : escapeHtml(initials || "呪");
+    control.querySelectorAll(".account-avatar").forEach(host => { host.innerHTML = avatar; });
+    control.querySelector(".account-toggle-copy b").textContent = account.displayName;
+    control.querySelector(".account-toggle-copy small").textContent = "Büyücü dosyası";
+    control.querySelector(".account-menu-head b").textContent = account.displayName;
+    control.querySelector(".account-menu-head small").textContent = account.email;
+    control.hidden = false;
+  }
+
   /* ---- Olaylar ---- */
   function wireEvents() {
     const themeBtn = document.querySelector("#themeToggle");
     const themeMenu = document.querySelector("#themeMenu");
+    const accountBtn = document.querySelector("#accountToggle");
+    const accountMenu = document.querySelector("#accountMenu");
     if (themeBtn) {
       themeBtn.addEventListener("click", () => {
         const open = themeMenu.classList.toggle("open");
@@ -173,13 +205,27 @@
         themeMenu?.classList.remove("open");
         themeBtn?.setAttribute("aria-expanded", "false");
       }
+      if (!event.target.closest(".account-control")) {
+        accountMenu?.classList.remove("open");
+        accountBtn?.setAttribute("aria-expanded", "false");
+      }
     });
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         themeMenu?.classList.remove("open");
         themeBtn?.setAttribute("aria-expanded", "false");
+        accountMenu?.classList.remove("open");
+        accountBtn?.setAttribute("aria-expanded", "false");
       }
     });
+
+    accountBtn?.addEventListener("click", () => {
+      const open = accountMenu.classList.toggle("open");
+      accountBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      themeMenu?.classList.remove("open");
+      themeBtn?.setAttribute("aria-expanded", "false");
+    });
+    document.querySelector("#accountLogout")?.addEventListener("click", JJKAuth.logout);
 
     document.querySelectorAll(".swatch").forEach((s) => {
       s.addEventListener("click", () => applyAccent(s.dataset.hex));
@@ -211,7 +257,7 @@
       },
       { threshold: 0.12 }
     );
-    els.forEach((el) => obs.observe(el));
+    els.forEach((el,index) => { el.style.setProperty("--reveal-delay",`${Math.min(index%8,7)*38}ms`); obs.observe(el); });
   }
 
   // Dinamik eklenen .reveal öğeleri için tekrar tarama
@@ -228,15 +274,55 @@
       },
       { threshold: 0.12 }
     );
-    els.forEach((el) => obs.observe(el));
+    els.forEach((el,index) => { el.style.setProperty("--reveal-delay",`${Math.min(index%8,7)*38}ms`); obs.observe(el); });
+  }
+
+  /* ---- Atmosfer ve sayfa geçişleri ---- */
+  function renderAtmosphere() {
+    const page=document.body.dataset.page||"home",meta=PAGE_ATMOSPHERE[page]||PAGE_ATMOSPHERE.home;
+    document.body.insertAdjacentHTML("afterbegin",`
+      <div class="ambient-field" aria-hidden="true"><span>${meta.glyph}</span><i></i><i></i><i></i></div>
+      <div class="scroll-progress" aria-hidden="true"><i></i></div>
+      <div class="page-transition" aria-hidden="true"><div><b>${meta.glyph}</b><span>${meta.label}</span><small>JUJUTSU HIGH // DOSYA AKTARIMI</small></div></div>`);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>document.documentElement.classList.add("page-ready")));
+  }
+
+  function wireAtmosphere() {
+    const root=document.documentElement,progress=document.querySelector(".scroll-progress i"),curtain=document.querySelector(".page-transition");
+    let ticking=false;
+    const updateScroll=()=>{
+      const max=document.documentElement.scrollHeight-innerHeight;
+      root.style.setProperty("--page-scroll",String(scrollY));
+      root.style.setProperty("--ambient-shift",`${scrollY*.026}px`);
+      if(progress)progress.style.transform=`scaleX(${max>0?Math.min(1,scrollY/max):0})`;
+      ticking=false;
+    };
+    addEventListener("scroll",()=>{if(!ticking){ticking=true;requestAnimationFrame(updateScroll);}},{passive:true}); updateScroll();
+
+    let transitionLocked=false;
+    document.addEventListener("click",event=>{
+      if(transitionLocked||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+      const link=event.target.closest("a[href]"); if(!link||link.target==="_blank"||link.hasAttribute("download"))return;
+      const raw=link.getAttribute("href"); if(!raw||raw.startsWith("#")||raw.startsWith("javascript:"))return;
+      const url=new URL(link.href,location.href); if(url.origin!==location.origin||!url.pathname.endsWith(".html"))return;
+      event.preventDefault();
+      const file=url.pathname.split("/").pop(),navItem=NAV.find(item=>item.href===file),next=navItem?PAGE_ATMOSPHERE[navItem.page]:null;
+      if(next&&curtain){curtain.querySelector("b").textContent=next.glyph;curtain.querySelector("span").textContent=next.label;}
+      transitionLocked=true;
+      root.classList.add("page-leaving");
+      setTimeout(()=>{location.href=url.href;},400);
+    });
   }
 
   /* ---- Açılış ---- */
   function boot() {
+    renderAtmosphere();
     renderChrome();
+    hydrateAccountControl().catch(console.error);
     applyTheme(localStorage.getItem("jjk-theme-mode") || localStorage.getItem("jjk-theme") || "dark");
     applyAccent(localStorage.getItem("jjk-accent") || "#ff4747");
     wireEvents();
+    wireAtmosphere();
     initReveal();
   }
 

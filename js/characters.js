@@ -97,6 +97,12 @@
 
   const FEATURED = ["yuji","megumi","nobara","gojo","sukuna","yuta","maki","kenjaku","geto","toji","nanami","choso","mahito","higuruma","kashimo"];
   const FINAL_STATUS = {gojo:"Hayatını kaybetti",nobara:"Hayatta",sukuna:"Hayatını kaybetti",kenjaku:"Hayatını kaybetti",higuruma:"Hayatta",uraume:"Hayatını kaybetti",tengen:"Bilinmiyor"};
+  const POWER_RATINGS = {
+    gojo:[100,100,96,94,98], sukuna:[100,100,94,100,99], yuji:[88,82,91,96,80], megumi:[83,91,78,75,94], nobara:[72,82,74,71,80],
+    yuta:[98,96,87,94,91], maki:[12,76,98,97,88], toji:[0,74,100,96,94], kenjaku:[97,99,84,92,100], nanami:[76,79,75,82,92],
+    choso:[88,87,82,90,82], mahito:[93,95,83,92,88], higuruma:[86,94,73,79,97], kashimo:[96,91,94,90,86], hakari:[94,90,88,100,85]
+  };
+  const STAT_LABELS = ["Lanet enerjisi","Teknik","Hız","Dayanıklılık","Strateji"];
   const IMAGE_NOTES = {angel:"Angel, Hana Kurusu ile aynı bedeni paylaşır; görsel ortak bedenlerini gösterir.","michizane-sugawara":"Kanonda resmî yüz tasarımı bulunmadığı için kamu malı tarihsel Sugawara no Michizane portresi kullanılmıştır."};
   const DETAILS = {
     yuji:{role:"Başkahraman • Tokyo birinci sınıf öğrencisi",abilities:["İnsanüstü fizik ve yakın dövüş sezgisi","Divergent Fist ve art arda Kara Şimşek kullanımı","Kan Manipülasyonu ve Shrine tekniğinin uyanışı","Ters Lanet Tekniği ve ruhu hedefleyebilen darbeler"],weaknesses:["Kendini başkaları için feda etmeye yatkın olması","Tekniklerini serinin son bölümünde yeni öğreniyor olması","Yoğun suçluluk duygusu ve travma"],story:"Sukuna'nın parmağını yutarak büyücülük dünyasına girer. Büyükbabasının ‘insanlara yardım et’ vasiyetini izler; Shibuya'nın yıkımı, Culling Game ve Shinjuku hesaplaşması boyunca bir insanın nasıl ölmesi gerektiği sorusuyla yüzleşir."},
@@ -116,7 +122,23 @@
 
   let ALL = [];
   let filters = { search:"", side:"all", status:"all", affiliation:"all", sort:"featured" };
-  let showSpoilers = localStorage.getItem("jjk-show-spoilers") === "true";
+  let showSpoilers = JJKAuth.storage.getItem("jjk-show-spoilers") === "true";
+  let compareIds = [];
+  let favorites = (() => {
+    try { const value=JSON.parse(JJKAuth.storage.getItem("jjk-favorite-characters-v1")||"[]"); return Array.isArray(value)?value:[]; }
+    catch { return []; }
+  })();
+
+  function isFavorite(id) { return favorites.some((item) => (typeof item === "string" ? item : item.id) === id); }
+  function toggleFavorite(id, reopen=false) {
+    const c=ALL.find((item)=>item.id===id); if(!c)return;
+    if(isFavorite(id)) favorites=favorites.filter((item)=>(typeof item === "string" ? item : item.id)!==id);
+    else favorites.push({id:c.id,name:c.name,img:c.img,grade:c.grade,affiliation:c.affiliation});
+    JJKAuth.storage.setItem("jjk-favorite-characters-v1",JSON.stringify(favorites));
+    render();
+    if(reopen)openModal(id);
+    JJK.toast(isFavorite(id)?`${c.name} koleksiyonuna eklendi.`:`${c.name} koleksiyondan çıkarıldı.`);
+  }
 
   function normalizeExisting(c) {
     const detail = DETAILS[c.id] || {};
@@ -136,10 +158,16 @@
   }
 
   function cardHTML(c) {
-    return `<button class="char-card reveal" data-id="${c.id}" type="button">
-      <div class="ph">${avatar(c)}<span class="grade-badge">${JJK.escapeHtml(c.grade)}</span><span class="category-badge">${JJK.escapeHtml(c.category)}</span></div>
-      <div class="info"><h3>${JJK.escapeHtml(c.name)}</h3><div class="jp-card">${JJK.escapeHtml(c.jp||"")}</div><div class="aff"><span class="side-dot"></span>${JJK.escapeHtml(c.affiliation)}</div><div class="mini-tags">${c.tags.slice(0,2).map(t=>`<span>${JJK.escapeHtml(t)}</span>`).join("")}</div></div>
-    </button>`;
+    const selected=compareIds.includes(c.id);
+    const favorite=isFavorite(c.id);
+    return `<article class="char-card reveal ${selected?"compare-selected":""}" data-id="${c.id}">
+      <button class="compare-toggle" type="button" aria-label="${JJK.escapeHtml(c.name)} karşılaştırma seçimi" aria-pressed="${selected}">${selected?"✓":"VS"}</button>
+      <button class="favorite-toggle ${favorite?"saved":""}" type="button" aria-label="${JJK.escapeHtml(c.name)} ${favorite?"favorilerden çıkar":"favorilere ekle"}" aria-pressed="${favorite}">${favorite?"★":"☆"}</button>
+      <button class="char-open" type="button" aria-label="${JJK.escapeHtml(c.name)} dosyasını aç">
+        <div class="ph">${avatar(c)}<span class="grade-badge">${JJK.escapeHtml(c.grade)}</span><span class="category-badge">${JJK.escapeHtml(c.category)}</span></div>
+        <div class="info"><h3>${JJK.escapeHtml(c.name)}</h3><div class="jp-card">${JJK.escapeHtml(c.jp||"")}</div><div class="aff"><span class="side-dot"></span>${JJK.escapeHtml(c.affiliation)}</div><div class="mini-tags">${c.tags.slice(0,2).map(t=>`<span>${JJK.escapeHtml(t)}</span>`).join("")}</div></div>
+      </button>
+    </article>`;
   }
 
   function searchText(c) { return [c.name,c.jp,c.affiliation,c.category,c.grade,c.blurb,...c.tags,...c.abilities].join(" ").toLocaleLowerCase("tr"); }
@@ -155,9 +183,76 @@
     const list=filteredList(), grid=document.querySelector("#charGrid");
     document.querySelector("#charCount").textContent=`${list.length} / ${ALL.length} karakter gösteriliyor`;
     grid.innerHTML=list.length?list.map(cardHTML).join(""):`<div class="empty"><strong>Sonuç bulunamadı</strong><span>Arama kelimesini veya filtreleri değiştirmeyi dene.</span></div>`;
-    grid.querySelectorAll(".char-card").forEach(el=>el.addEventListener("click",()=>openModal(el.dataset.id)));
+    grid.querySelectorAll(".char-card").forEach(el=>{
+      el.querySelector(".char-open").addEventListener("click",()=>openModal(el.dataset.id));
+      el.querySelector(".compare-toggle").addEventListener("click",()=>toggleCompare(el.dataset.id));
+      el.querySelector(".favorite-toggle").addEventListener("click",()=>toggleFavorite(el.dataset.id));
+    });
     renderActiveFilters(); JJK.observeReveal(grid);
   }
+
+  function ratingsFor(c) {
+    if (POWER_RATINGS[c.id]) return POWER_RATINGS[c.id];
+    const grade = String(c.grade || "");
+    const base = grade.includes("Özel") ? 88 : grade.includes("1.") ? 76 : grade.includes("2.") ? 65 : grade.includes("3.") ? 54 : 45;
+    const seed = [...c.id].reduce((sum,ch)=>sum+ch.charCodeAt(0),0);
+    return [0,1,2,3,4].map((_,i)=>Math.max(8,Math.min(94,base+((seed*(i+3))%19)-9)));
+  }
+
+  function renderCompareTray() {
+    const tray=document.querySelector("#compareTray"), slots=document.querySelector("#compareSlots");
+    if(!tray||!slots)return;
+    tray.classList.toggle("open",compareIds.length>0);
+    slots.innerHTML=[0,1].map(index=>{
+      const c=ALL.find(item=>item.id===compareIds[index]);
+      return c?`<button type="button" data-remove-compare="${c.id}" title="Seçimden çıkar"><img src="${JJK.escapeHtml(c.img)}" alt="" /><span>${JJK.escapeHtml(c.name)}</span><b>×</b></button>`:`<div class="compare-empty"><i>${index+1}</i><span>Dosya seç</span></div>`;
+    }).join("");
+    slots.querySelectorAll("[data-remove-compare]").forEach(button=>button.addEventListener("click",()=>toggleCompare(button.dataset.removeCompare)));
+    document.querySelector("#compareLaunch").disabled=compareIds.length!==2;
+  }
+
+  function toggleCompare(id) {
+    if(compareIds.includes(id))compareIds=compareIds.filter(item=>item!==id);
+    else if(compareIds.length<2)compareIds.push(id);
+    else { compareIds=[compareIds[1],id]; JJK.toast("İlk dosya değiştirildi."); }
+    render(); renderCompareTray();
+  }
+
+  function statRows(c) {
+    return ratingsFor(c).map((value,index)=>`<div class="compare-stat"><span>${STAT_LABELS[index]}</span><div><i style="width:${value}%"></i></div><b>${value}</b></div>`).join("");
+  }
+
+  function comparisonSide(c, side) {
+    const hidden=c.spoiler&&!showSpoilers;
+    return `<section class="compare-side compare-${side}">
+      <div class="compare-portrait">${avatar(c,true)}</div>
+      <span class="compare-side-label">DOSYA ${side==="left"?"A":"B"}</span>
+      <h3>${JJK.escapeHtml(c.name)}</h3><p class="compare-role">${JJK.escapeHtml(c.role)}</p>
+      <div class="compare-facts"><div><small>Sınıf</small><strong>${JJK.escapeHtml(c.grade)}</strong></div><div><small>Durum</small><strong>${hidden?"Spoiler gizli":JJK.escapeHtml(c.status)}</strong></div></div>
+      <div class="compare-stats">${statRows(c)}</div>
+      <div class="compare-techniques"><small>İMZA TEKNİKLER</small>${c.abilities.slice(0,3).map(item=>`<span>${JJK.escapeHtml(item)}</span>`).join("")}</div>
+    </section>`;
+  }
+
+  function openCompare() {
+    if(compareIds.length!==2)return;
+    const left=ALL.find(c=>c.id===compareIds[0]), right=ALL.find(c=>c.id===compareIds[1]);
+    if(!left||!right)return;
+    const special=[left.id,right.id].sort().join(":")==="gojo:sukuna";
+    const overlay=document.querySelector("#compareModal"), modal=overlay.querySelector(".compare-modal");
+    modal.classList.toggle("special-clash",special);
+    modal.innerHTML=`
+      <header class="compare-head"><div><small>${special?"SHINJUKU // 24.12":"DOSYA ANALİZİ // VS"}</small><h2>${special?"En Güçlülerin Hesaplaşması":"Karakter Karşılaştırması"}</h2><p>${special?"Sınırsızlık açık. Mabedin bariyeri yok. Geriye yalnızca kimin alanının ayakta kalacağı kaldı.":"Değerler resmî bir güç sıralaması değil; teknik, eşleşme ve savaş koşullarının editoryal özetidir."}</p></div><button class="modal-close" type="button" aria-label="Kapat">×</button></header>
+      ${special?`<div class="clash-easter"><span class="infinity-sigil">∞</span><i></i><span class="shrine-sigil">伏魔御厨子</span><b>DOMAIN CLASH DETECTED</b></div>`:""}
+      <div class="compare-layout">${comparisonSide(left,"left")}<div class="compare-vs"><span>VS</span></div>${comparisonSide(right,"right")}</div>
+      <footer class="compare-foot"><span>Sonuç: koşullara bağlı</span><button type="button" id="swapCompare">Tarafları değiştir ↔</button></footer>`;
+    overlay.classList.add("open"); document.body.classList.add("modal-open");
+    modal.querySelector(".modal-close").addEventListener("click",closeCompare);
+    modal.querySelector("#swapCompare").addEventListener("click",()=>{compareIds.reverse();openCompare();renderCompareTray();});
+    if(special&&window.JJKAudio)window.JJKAudio.playSfx("special");
+  }
+
+  function closeCompare(){document.querySelector("#compareModal").classList.remove("open");document.body.classList.remove("modal-open");}
 
   function section(title, items, cls="") {
     if (!items || !items.length) return "";
@@ -168,7 +263,7 @@
     const c=ALL.find(x=>x.id===id); if(!c)return;
     const overlay=document.querySelector("#charModal"), hidden=c.spoiler&&!showSpoilers;
     overlay.querySelector(".modal").innerHTML=`
-      <header class="wiki-modal-head"><div class="modal-portrait">${avatar(c,true)}${c.imageNote?`<span class="image-note">${JJK.escapeHtml(c.imageNote)}</span>`:""}</div><div class="modal-title"><div class="eyebrow">${JJK.escapeHtml(c.category)} • ${JJK.escapeHtml(c.affiliation)}</div><h2>${JJK.escapeHtml(c.name)}</h2><div class="jp">${JJK.escapeHtml(c.jp||"")}</div><p>${JJK.escapeHtml(c.role)}</p></div><button class="modal-close" aria-label="Kapat">×</button></header>
+      <header class="wiki-modal-head"><div class="modal-portrait">${avatar(c,true)}${c.imageNote?`<span class="image-note">${JJK.escapeHtml(c.imageNote)}</span>`:""}</div><div class="modal-title"><div class="eyebrow">${JJK.escapeHtml(c.category)} • ${JJK.escapeHtml(c.affiliation)}</div><h2>${JJK.escapeHtml(c.name)}</h2><div class="jp">${JJK.escapeHtml(c.jp||"")}</div><p>${JJK.escapeHtml(c.role)}</p><button class="modal-favorite ${isFavorite(c.id)?"saved":""}" type="button">${isFavorite(c.id)?"★ Koleksiyonumda":"☆ Koleksiyona ekle"}</button></div><button class="modal-close" aria-label="Kapat">×</button></header>
       <nav class="article-nav"><button class="active" data-tab="overview">Genel bakış</button><button data-tab="power">Güçler</button><button data-tab="story">Hikâye</button></nav>
       <div class="modal-body wiki-article">
         <div class="article-tab active" data-panel="overview">
@@ -180,10 +275,11 @@
       </div>`;
     overlay.classList.add("open"); document.body.classList.add("modal-open");
     overlay.querySelector(".modal-close").addEventListener("click",closeModal);
+    overlay.querySelector(".modal-favorite").addEventListener("click",()=>toggleFavorite(id,true));
     overlay.querySelectorAll(".article-nav button").forEach(btn=>btn.addEventListener("click",()=>{
       overlay.querySelectorAll(".article-nav button,.article-tab").forEach(x=>x.classList.remove("active")); btn.classList.add("active"); overlay.querySelector(`[data-panel="${btn.dataset.tab}"]`).classList.add("active");
     }));
-    const reveal=overlay.querySelector("#revealThis"); if(reveal)reveal.addEventListener("click",()=>{showSpoilers=true;localStorage.setItem("jjk-show-spoilers","true");document.querySelector("#spoilerToggle").checked=true;openModal(id);});
+    const reveal=overlay.querySelector("#revealThis"); if(reveal)reveal.addEventListener("click",()=>{showSpoilers=true;JJKAuth.storage.setItem("jjk-show-spoilers","true");document.querySelector("#spoilerToggle").checked=true;openModal(id);});
   }
 
   function closeModal(){document.querySelector("#charModal").classList.remove("open");document.body.classList.remove("modal-open");}
@@ -205,15 +301,19 @@
     document.querySelector("#affiliationFilter").addEventListener("change",e=>{filters.affiliation=e.target.value;render();});
     document.querySelector("#sortSelect").addEventListener("change",e=>{filters.sort=e.target.value;render();});
     document.querySelector("#spoilerToggle").checked=showSpoilers;
-    document.querySelector("#spoilerToggle").addEventListener("change",e=>{showSpoilers=e.target.checked;localStorage.setItem("jjk-show-spoilers",String(showSpoilers));});
+    document.querySelector("#spoilerToggle").addEventListener("change",e=>{showSpoilers=e.target.checked;JJKAuth.storage.setItem("jjk-show-spoilers",String(showSpoilers));});
     document.querySelector("#clearFilters").addEventListener("click",()=>{filters={search:"",side:"all",status:"all",affiliation:"all",sort:"featured"};document.querySelector("#charSearch").value="";document.querySelector("#statusFilter").value="all";document.querySelector("#affiliationFilter").value="all";document.querySelector("#sortSelect").value="featured";chips.querySelectorAll("button").forEach((x,i)=>x.classList.toggle("active",i===0));render();});
     const overlay=document.querySelector("#charModal"); overlay.addEventListener("click",e=>{if(e.target===overlay)closeModal();}); document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
+    document.querySelector("#compareLaunch").addEventListener("click",openCompare);
+    document.querySelector("#compareClear").addEventListener("click",()=>{compareIds=[];render();renderCompareTray();});
+    document.querySelector("#compareModal").addEventListener("click",e=>{if(e.target.id==="compareModal")closeCompare();});
   }
 
   async function init(){
     try { const base=await JJK.fetchJSON("data/characters.json"); ALL=[...base.map(normalizeExisting),...EXTRA.map(normalizeExtra)]; }
     catch(e){document.querySelector("#charGrid").innerHTML=`<p class="empty">Karakter verileri yüklenemedi: ${JJK.escapeHtml(e.message)}</p>`;return;}
     document.querySelector("#totalCount").textContent=ALL.length; document.querySelector("#groupCount").textContent=new Set(ALL.map(c=>c.category)).size; setupControls(); render();
+    const requested=new URLSearchParams(location.search).get("character"); if(requested&&ALL.some(c=>c.id===requested))openModal(requested);
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();

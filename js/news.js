@@ -16,7 +16,7 @@
   let saved;
 
   try {
-    const stored = JSON.parse(localStorage.getItem(SAVED_KEY) || "[]");
+    const stored = JSON.parse(JJKAuth.storage.getItem(SAVED_KEY) || "[]");
     saved = new Set(Array.isArray(stored) ? stored : []);
   } catch {
     saved = new Set();
@@ -34,7 +34,7 @@
   }
 
   function persistSaved() {
-    localStorage.setItem(SAVED_KEY, JSON.stringify([...saved]));
+    JJKAuth.storage.setItem(SAVED_KEY, JSON.stringify([...saved]));
     document.querySelector("#savedTotal").textContent = saved.size;
   }
 

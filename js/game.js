@@ -15,7 +15,31 @@
   const GROUND = 236;        // ayak hizası
   const GRAV = 0.62, MOVE = 2.3, JUMPV = -10;
   const ROUND_SECONDS = 60;
-  const WINS_NEEDED = 2;
+  let winsNeeded = 2;
+  let matchFormat = 3;
+  let difficulty = "normal";
+  let stance = "balanced";
+
+  const DIFFICULTY = {
+    easy:{think:[28,46],special:.32,ultimate:.35,label:"Çırak"},
+    normal:{think:[14,30],special:.55,ultimate:.62,label:"1. Sınıf"},
+    hard:{think:[7,17],special:.78,ultimate:.88,label:"Özel Sınıf"}
+  };
+  const STANCES = {
+    balanced:{label:"Dengeli",move:1,damage:1,defense:1,meter:1},
+    rush:{label:"Yakın Dövüş",move:1.12,damage:1.1,defense:.9,meter:.9},
+    control:{label:"Teknik Ustası",move:.94,damage:.95,defense:.94,meter:1.28}
+  };
+  const ULTIMATES = {
+    gojo:{type:"domain",name:"Sınırsız Boşluk"},
+    yuji:{type:"domain",name:"İsimsiz Alan"},
+    sukuna:{type:"domain",name:"Şeytani Mabet"},
+    megumi:{type:"domain",name:"Chimera Gölge Bahçesi (Eksik)"},
+    mahito:{type:"domain",name:"Kendini Kusursuzlaştırma"},
+    nobara:{type:"finisher",name:"Rezonans: Saç Tokası"},
+    toji:{type:"finisher",name:"Büyücü Katili Hücumu"},
+    todo:{type:"finisher",name:"Boogie Woogie: Zirve"}
+  };
 
   // ---- Roster ----
   const ROSTER = [
@@ -39,8 +63,8 @@
 
   // ---- Giriş ----
   const keys = {}, prev = {};
-  const P1 = { left:"KeyA", right:"KeyD", jump:"KeyW", punch:"KeyJ", kick:"KeyK", special:"KeyL" };
-  const P2 = { left:"ArrowLeft", right:"ArrowRight", jump:"ArrowUp", punch:"KeyN", kick:"KeyM", special:"Comma" };
+  const P1 = { left:"KeyA", right:"KeyD", jump:"KeyW", punch:"KeyJ", kick:"KeyK", special:"KeyL", ultimate:"KeyI" };
+  const P2 = { left:"ArrowLeft", right:"ArrowRight", jump:"ArrowUp", punch:"KeyN", kick:"KeyM", special:"Comma", ultimate:"Slash" };
   const MAPPED = new Set([...Object.values(P1), ...Object.values(P2), "Space"]);
 
   window.addEventListener("keydown", (e) => { if (MAPPED.has(e.code)) e.preventDefault(); keys[e.code] = true; });
@@ -83,13 +107,17 @@
   let roundTimer = ROUND_SECONDS * 60;
   let round = 1, roundWinner = null;
 
-  function makeFighter(def, x, facing, isAI, ctrl) {
+  function makeFighter(def, x, facing, isAI, ctrl, style="balanced") {
+    const mods=STANCES[style]||STANCES.balanced;
     return Object.assign({}, def, {
       x, y: GROUND, vx: 0, vy: 0, facing, onGround: true,
       hp: 100, maxHp: 100, state: "idle", atkT: 0, hasHit: false,
       hitstun: 0, flash: 0, meter: 0, anim: 0, blocking: false,
       isAI, ctrl, spType: null, spDur: 0,
       aiT: 0, aiHold: 0, aiBlockT: 0, wins: 0,
+      ultimate:0, ultimateUsed:false, ultimateName:ULTIMATES[def.id].name, ultimateType:ULTIMATES[def.id].type, ultimateDur:0,
+      moveMult:mods.move, damageMult:mods.damage, defenseMult:mods.defense, meterMult:mods.meter,
+      combo:0, comboTimer:0, stats:{hits:0,damage:0,blocked:0,maxCombo:0,specials:0,ultimates:0},
     });
   }
 
@@ -106,18 +134,21 @@
       punch: pressed(c.punch),
       kick: pressed(c.kick),
       special: pressed(c.special),
+      ultimate: pressed(c.ultimate),
       blocking: down(awayKey) && f.onGround,
     };
   }
 
   function aiControl(f, opp, dir) {
-    const out = { moveDir: 0, jump: false, punch: false, kick: false, special: false, blocking: false };
+    const out = { moveDir: 0, jump: false, punch: false, kick: false, special: false, ultimate:false, blocking: false };
     const ad = Math.abs(opp.x - f.x);
+    const tune=DIFFICULTY[difficulty];
     f.aiT--;
     if (f.aiT <= 0) {
-      f.aiT = 14 + Math.random() * 26;
+      f.aiT = tune.think[0] + Math.random() * (tune.think[1]-tune.think[0]);
       f.aiHold = 0;
-      if (f.meter >= 100 && ad < 175 && Math.random() < 0.55) out.special = true;
+      if (f.ultimate >= 100 && !f.ultimateUsed && Math.random() < tune.ultimate) out.ultimate = true;
+      else if (f.meter >= 100 && ad < 175 && Math.random() < tune.special) out.special = true;
       else if (ad > 60) { f.aiHold = dir; if (Math.random() < 0.10) out.jump = true; }
       else {
         const r = Math.random();
@@ -135,11 +166,12 @@
   function updateFighter(f, opp, frozen) {
     f.flash = Math.max(0, f.flash - 1);
     f.anim++;
+    if(f.comboTimer>0)f.comboTimer--; else f.combo=0;
 
     if (f.state === "hurt") { f.hitstun--; if (f.hitstun <= 0) f.state = "idle"; }
 
     const ctl = frozen
-      ? { moveDir: 0, jump: false, punch: false, kick: false, special: false, blocking: false }
+      ? { moveDir: 0, jump: false, punch: false, kick: false, special: false, ultimate:false, blocking: false }
       : readControl(f, opp);
 
     const actionable = f.onGround && (f.state === "idle" || f.state === "walk");
@@ -150,7 +182,8 @@
     f.blocking = ctl.blocking && (f.state === "idle" || f.state === "walk");
 
     if (actionable) {
-      if (ctl.special && f.meter >= 100) startSpecial(f);
+      if (ctl.ultimate && f.ultimate >= 100 && !f.ultimateUsed) startUltimate(f);
+      else if (ctl.special && f.meter >= 100) startSpecial(f);
       else if (ctl.punch) startAttack(f, "punch");
       else if (ctl.kick) startAttack(f, "kick");
       else if (ctl.jump) { f.vy = JUMPV; f.onGround = false; f.state = "jump"; SND("jump"); }
@@ -160,7 +193,7 @@
     if (canMove) {
       let m = ctl.moveDir;
       if (f.blocking) m *= 0.5;
-      f.vx = m * MOVE;
+      f.vx = m * MOVE * f.moveMult;
       if (f.onGround) f.state = m !== 0 ? "walk" : "idle";
     } else {
       f.vx *= 0.82;
@@ -176,6 +209,11 @@
       updateSpecial(f, opp);
       if (f.atkT >= f.spDur) f.state = "idle";
     }
+    if (f.state === "ultimate") {
+      f.atkT++;
+      updateUltimate(f,opp);
+      if(f.atkT>=f.ultimateDur)f.state="idle";
+    }
 
     // Fizik
     f.vy += GRAV;
@@ -186,15 +224,26 @@
       if (!f.onGround) { f.onGround = true; if (f.state === "jump") f.state = "idle"; }
     }
 
-    f.meter = Math.min(100, f.meter + 0.22);
+    f.meter = Math.min(100, f.meter + 0.18*f.meterMult);
   }
 
   function startAttack(f, type) { f.state = type; f.atkT = 0; f.hasHit = false; f.vx = 0; SND(type); }
   function startSpecial(f) {
     f.state = "special"; f.atkT = 0; f.hasHit = false; f.vx = 0; f.meter = 0;
     f.spType = f.special.type;
+    f.stats.specials++;
     f.spDur = f.spType === "burst" ? 32 : f.spType === "slash" ? 30 : 28;
     SND("special");
+  }
+
+  function startUltimate(f) {
+    f.state="ultimate"; f.atkT=0; f.vx=0; f.ultimate=0; f.ultimateUsed=true; f.ultimateDur=72; f.hasHit=false; f.stats.ultimates++;
+    SND("special");
+  }
+
+  function updateUltimate(f,opp) {
+    if(f.atkT<20){f.flash=2;spawnSpark(f.x+(Math.random()-.5)*70,f.y-25-Math.random()*45,f.accent,1);}
+    if(f.atkT===24&&!f.hasHit){f.hasHit=true;applyHit(f,opp,28,8,-6,28);hitstop=9;}
   }
 
   function updateMelee(f, opp) {
@@ -237,19 +286,24 @@
 
   function applyHit(att, def, dmg, kb, ku, stun) {
     if (def.state === "ko") return;
+    const dealt=Math.max(1,Math.round(dmg*(att.damageMult||1)/(def.defenseMult||1)));
     if (def.blocking) {
-      def.hp = Math.max(0, def.hp - dmg * 0.25);
+      def.hp = Math.max(0, def.hp - dealt * 0.25);
       def.vx = att.facing * kb * 0.4;
       att.meter = Math.min(100, att.meter + 4);
+      if(att.stats)att.stats.blocked++;
       spawnSpark(def.x + (att.facing > 0 ? -8 : 8), def.y - 28, "#cfe8ff", 5);
       SND("block");
     } else {
-      def.hp = Math.max(0, def.hp - dmg);
+      def.hp = Math.max(0, def.hp - dealt);
       def.state = "hurt"; def.hitstun = stun; def.flash = 8;
       def.vx = att.facing * kb; def.vy = ku; def.onGround = false;
       spawnSpark(def.x + (att.facing > 0 ? -6 : 6), def.y - 28, "#ffffff", 8);
-      att.meter = Math.min(100, att.meter + dmg * 0.6);
-      def.meter = Math.min(100, def.meter + dmg * 0.4);
+      att.meter = Math.min(100, att.meter + dealt * 0.6*(att.meterMult||1));
+      def.meter = Math.min(100, def.meter + dealt * 0.4*(def.meterMult||1));
+      att.ultimate=Math.min(100,(att.ultimate||0)+dealt*1.45);
+      def.ultimate=Math.min(100,(def.ultimate||0)+dealt*.85);
+      if(att.stats){att.stats.hits++;att.stats.damage+=dealt;att.combo=att.comboTimer>0?att.combo+1:1;att.comboTimer=75;att.stats.maxCombo=Math.max(att.stats.maxCombo,att.combo);}
       if (def.hp <= 0) { def.state = "ko"; def.vx = att.facing * 5; def.vy = -6.5; def.onGround = false; SND("ko"); }
       else SND("hit");
       hitstop = 4;
@@ -263,8 +317,9 @@
       const target = p.owner === p1 ? p2 : p1;
       const box = { x: p.x - p.w / 2, y: p.y - p.h / 2, w: p.w, h: p.h };
       if (target.state !== "ko" && overlap(box, bodyBox(target))) {
-        const fake = { facing: p.dir, meter: 0 };
-        applyHit(fake, target, p.dmg, 5, -3, 16);
+        const oldFacing=p.owner.facing; p.owner.facing=p.dir;
+        applyHit(p.owner, target, p.dmg, 5, -3, 16);
+        p.owner.facing=oldFacing;
         spawnSpark(p.x, p.y, p.color, 9);
         projectiles.splice(i, 1); continue;
       }
@@ -297,7 +352,7 @@
     }
   }
   function afterRoundover() {
-    if (p1.wins >= WINS_NEEDED || p2.wins >= WINS_NEEDED) {
+    if (p1.wins >= winsNeeded || p2.wins >= winsNeeded) {
       scene = "matchover";
       showResult(p1.wins > p2.wins ? p1 : p2);
     } else {
@@ -307,7 +362,7 @@
     }
   }
   function resetRound() {
-    p1.hp = p2.hp = 100; p1.meter = p2.meter = 0;
+    p1.hp = p2.hp = 100; p1.meter = p2.meter = 0; p1.ultimate=p2.ultimate=0; p1.ultimateUsed=p2.ultimateUsed=false; p1.combo=p2.combo=0;
     p1.x = 150; p1.y = GROUND; p1.vx = p1.vy = 0; p1.state = "idle"; p1.facing = 1; p1.onGround = true;
     p2.x = 330; p2.y = GROUND; p2.vx = p2.vy = 0; p2.state = "idle"; p2.facing = -1; p2.onGround = true;
     projectiles = []; sparks = [];
@@ -368,7 +423,7 @@
       const ext = t < 0.45 ? t / 0.45 : 1 - (t - 0.45) / 0.55;
       p.fLeg.a = 0.4 + ext * 1.15; p.fLeg.b = ext * 0.25;
       p.bLeg.a = -0.2; p.torso = -0.12 * ext; p.bArm.a = -0.3; p.fArm.a = 0.4;
-    } else if (st === "special") {
+    } else if (st === "special" || st === "ultimate") {
       const t = clamp(f.atkT / f.spDur, 0, 1);
       p.torso = t < 0.4 ? -0.28 : 0.4; p.fArm.a = 0.6 + (t > 0.4 ? 1.0 : 0.2);
       p.fArm.b = 0.2; p.bArm.a = -0.2; p.bob = -Math.abs(Math.sin(t * 7)) * 0.8;
@@ -562,7 +617,7 @@
     ctx.textAlign = "left"; ctx.fillText(p1.name, 14, 40);
     ctx.textAlign = "right"; ctx.fillText(p2.name + (p2.isAI ? " (CPU)" : ""), VW - 14, 40);
     // Raunt pipleri
-    for (let i = 0; i < WINS_NEEDED; i++) {
+    for (let i = 0; i < winsNeeded; i++) {
       ctx.fillStyle = i < p1.wins ? "#ffd34d" : "rgba(255,255,255,0.25)";
       ctx.fillRect(14 + i * 12, 44, 8, 8);
       ctx.fillStyle = i < p2.wins ? "#ffd34d" : "rgba(255,255,255,0.25)";
@@ -571,6 +626,10 @@
     // Enerji barları
     drawMeter(14, 56, 120, p1.meter / 100, false, p1.accent);
     drawMeter(VW - 14 - 120, 56, 120, p2.meter / 100, true, p2.accent);
+    drawMeter(14, 64, 120, p1.ultimate / 100, false, "#b45cff");
+    drawMeter(VW - 14 - 120, 64, 120, p2.ultimate / 100, true, "#b45cff");
+    if(p1.combo>1){ctx.fillStyle=p1.accent;ctx.font="bold 10px Outfit, sans-serif";ctx.textAlign="left";ctx.fillText(`${p1.combo} HIT`,14,80);}
+    if(p2.combo>1){ctx.fillStyle=p2.accent;ctx.font="bold 10px Outfit, sans-serif";ctx.textAlign="right";ctx.fillText(`${p2.combo} HIT`,VW-14,80);}
     // Zamanlayıcı
     ctx.fillStyle = "#fff"; ctx.font = "bold 16px Outfit, sans-serif"; ctx.textAlign = "center";
     ctx.fillText(Math.ceil(roundTimer / 60), VW / 2, 30);
@@ -601,6 +660,8 @@
       ctx.fillStyle = "#ffd34d"; ctx.font = "bold 24px Outfit, sans-serif";
       ctx.fillText(roundWinner ? roundWinner.name + " kazandı!" : "Berabere!", VW / 2, VH / 2);
     }
+    const caster=p1?.state==="ultimate"?p1:p2?.state==="ultimate"?p2:null;
+    if(caster&&caster.atkT<42){ctx.fillStyle="rgba(3,2,7,.66)";ctx.fillRect(0,92,VW,78);ctx.fillStyle=caster.accent;ctx.font="bold 11px Outfit, sans-serif";ctx.fillText(caster.ultimateType==="domain"?"ALAN GENİŞLETME":"NİHAİ HAMLE",VW/2,119);ctx.fillStyle="#fff";ctx.font="bold 25px Outfit, sans-serif";ctx.fillText(caster.ultimateName,VW/2,148);}
   }
 
   // ---- Ana döngü ----
@@ -659,17 +720,23 @@
           <img class="chip-face-bg" src="img/characters/${ROSTER[i].id}.webp" alt="" aria-hidden="true" />
           <img class="chip-face" src="img/characters/${ROSTER[i].id}.webp" alt="${ROSTER[i].name}" loading="lazy" />
         </span>
-        <span>${ROSTER[i].name}</span>
+        <span>${ROSTER[i].name}</span><small>${ROSTER[i].special.name} · ${ULTIMATES[ROSTER[i].id].type==="domain"?"Alan":"Nihai"}</small>
       </button>`;
     const grid = (who) => ROSTER.map((_, i) => faces(i, who)).join("");
 
     host.innerHTML = `
       <h2>Lanet Düellosu</h2>
-      <p class="ov-sub">Karakterini seç, raunt sistemiyle (3'te 2) dövüş!</p>
+      <p class="ov-sub">Karakterini, savaş stilini ve karşılaşma koşullarını belirle.</p>
       <div class="mode-row">
         <button class="chip ${mode === "cpu" ? "active" : ""}" data-mode="cpu">👤 vs 🤖 CPU</button>
         <button class="chip ${mode === "2p" ? "active" : ""}" data-mode="2p">👤 vs 👤 2 Oyuncu</button>
       </div>
+      <div class="duel-config">
+        <div><small>ZORLUK</small>${Object.entries(DIFFICULTY).map(([id,d])=>`<button class="chip ${difficulty===id?"active":""}" data-difficulty="${id}">${d.label}</button>`).join("")}</div>
+        <div><small>FORMAT</small>${[1,3,5].map(n=>`<button class="chip ${matchFormat===n?"active":""}" data-format="${n}">Bo${n}</button>`).join("")}</div>
+        <div><small>SAVAŞ STİLİ</small>${Object.entries(STANCES).map(([id,s])=>`<button class="chip ${stance===id?"active":""}" data-stance="${id}">${s.label}</button>`).join("")}</div>
+      </div>
+      <p class="duel-lore-note">Alan sahibi olmayan dövüşçüler, karakterlerine uygun nihai hamle kullanır.</p>
       <div class="pick-cols">
         <div class="pick-col p1"><h3>1. Oyuncu</h3><div class="pick-grid" id="gridP1">${grid("p1")}</div></div>
         <div class="vs-sep">VS</div>
@@ -680,6 +747,9 @@
     host.querySelectorAll("[data-mode]").forEach((b) =>
       b.addEventListener("click", () => { mode = b.dataset.mode; buildSelect(); refreshSel(); })
     );
+    host.querySelectorAll("[data-difficulty]").forEach(b=>b.addEventListener("click",()=>{difficulty=b.dataset.difficulty;buildSelect();}));
+    host.querySelectorAll("[data-format]").forEach(b=>b.addEventListener("click",()=>{matchFormat=+b.dataset.format;winsNeeded=Math.ceil(matchFormat/2);buildSelect();}));
+    host.querySelectorAll("[data-stance]").forEach(b=>b.addEventListener("click",()=>{stance=b.dataset.stance;buildSelect();}));
     host.querySelectorAll("#gridP1 .fighter-chip").forEach((b) =>
       b.addEventListener("click", () => { selP1 = +b.dataset.i; refreshSel(); })
     );
@@ -701,8 +771,9 @@
   function startMatch() {
     // Ses motorunu kullanıcı etkileşimiyle başlat (tarayıcı politikası)
     if (window.JJKAudio) { JJKAudio.init(); JJKAudio.resume(); JJKAudio.startMusic(); }
-    p1 = makeFighter(ROSTER[selP1], 150, 1, false, P1);
-    p2 = makeFighter(ROSTER[selP2], 330, -1, mode === "cpu", P2);
+    winsNeeded=Math.ceil(matchFormat/2);
+    p1 = makeFighter(ROSTER[selP1], 150, 1, false, P1, stance);
+    p2 = makeFighter(ROSTER[selP2], 330, -1, mode === "cpu", P2, "balanced");
     p1.wins = 0; p2.wins = 0; round = 1;
     resetRound();
     document.getElementById("selectScreen").classList.add("hidden");
@@ -713,15 +784,16 @@
   function showResult(winner) {
     const host = document.getElementById("resultScreen");
     host.innerHTML = `
-      <h2>${winner.name} kazandı! 🏆</h2>
+      <span class="result-kicker">DÜELLO RAPORU // ${DIFFICULTY[difficulty].label}</span><h2>${winner.name} kazandı! 🏆</h2>
       <p class="ov-sub">${p1.name} ${p1.wins} — ${p2.wins} ${p2.name}</p>
+      <div class="duel-report"><article><small>TOPLAM HASAR</small><strong>${p1.stats.damage}</strong><span>${p2.stats.damage}</span></article><article><small>İSABET</small><strong>${p1.stats.hits}</strong><span>${p2.stats.hits}</span></article><article><small>EN YÜKSEK KOMBO</small><strong>${p1.stats.maxCombo}</strong><span>${p2.stats.maxCombo}</span></article><article><small>ALAN / NİHAİ</small><strong>${p1.stats.ultimates}</strong><span>${p2.stats.ultimates}</span></article></div>
       <div class="mode-row">
         <button class="btn" id="rematchBtn">↻ Yeniden Dövüş</button>
         <button class="btn btn-outline" id="reselectBtn">Karakter Seç</button>
       </div>`;
     host.classList.remove("hidden");
     host.querySelector("#rematchBtn").addEventListener("click", () => {
-      p1.wins = 0; p2.wins = 0; round = 1; resetRound();
+      p1.wins = 0; p2.wins = 0; p1.stats={hits:0,damage:0,blocked:0,maxCombo:0,specials:0,ultimates:0}; p2.stats={hits:0,damage:0,blocked:0,maxCombo:0,specials:0,ultimates:0}; round = 1; resetRound();
       host.classList.add("hidden"); scene = "fight";
     });
     host.querySelector("#reselectBtn").addEventListener("click", () => {

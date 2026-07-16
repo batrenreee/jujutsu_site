@@ -9,13 +9,26 @@
   let activeFilter = "all";
   let query = "";
 
+  const STORY_ARCS = [
+    { id:"zero", code:"00", title:"Lanetli Çocuk", subtitle:"Ön Hikâye", volumeIds:["vol-0"], chapters:"0.1–0.4", note:"Yuta ve Rika'nın laneti, ana seriden önce Tokyo Jujutsu Lisesi'nin kapısını aralar." },
+    { id:"origin", code:"01", title:"Sukuna'nın Kabı", subtitle:"Başlangıç", volumeIds:["vol-1","vol-2"], chapters:"1–16", note:"Yuji'nin tek bir seçimi büyücüler dünyasının dengesini sonsuza dek değiştirir." },
+    { id:"mahito", code:"02", title:"Ruhun Şekli", subtitle:"Mahito ile Yüzleşme", volumeIds:["vol-3","vol-4"], chapters:"17–34", note:"Nanami, Junpei ve Mahito; Yuji'ye lanetlerin gerçek yüzünü gösterir." },
+    { id:"kyoto", code:"03", title:"Kardeş Okullar", subtitle:"Kyoto Etkinliği", volumeIds:["vol-5","vol-6"], chapters:"35–52", note:"Rekabet bir istilaya dönüşürken Yuji, Kara Şimşek'in ritmini yakalar." },
+    { id:"painting", code:"04", title:"Ölüm Tabloları", subtitle:"İtaatin Kökeni", volumeIds:["vol-7"], chapters:"53–61", note:"Yasohachi Köprüsü, üç öğrenciyi lanetli kardeşlerin geçmişine bağlar." },
+    { id:"inventory", code:"05", title:"Gizli Envanter", subtitle:"Geçmişin Kırılması", volumeIds:["vol-8","vol-9"], chapters:"62–79", note:"Gojo, Geto ve Toji'nin kesişen kaderleri bugünün çatışmasını hazırlar." },
+    { id:"shibuya", code:"06", title:"Shibuya Olayı", subtitle:"31 Ekim", volumeIds:["vol-10","vol-11","vol-12","vol-13","vol-14","vol-15","vol-16"], chapters:"80–142", note:"Bir gecelik operasyon, jujutsu toplumunun bütün kurallarını parçalar." },
+    { id:"preparation", code:"07", title:"Kusursuz Hazırlık", subtitle:"Fırtına Sonrası", volumeIds:["vol-17"], chapters:"143–152", note:"İnfaz emri, Tengen'in açıklaması ve Zenin klanındaki geri dönüşsüz hesaplaşma." },
+    { id:"culling", code:"08", title:"Eleme Oyunu", subtitle:"Koloniler", volumeIds:["vol-18","vol-19","vol-20","vol-21","vol-22","vol-23","vol-24"], chapters:"153–217", note:"Eski ve yeni büyücüler, Kenjaku'nun ölümcül kolonilerinde karşı karşıya gelir." },
+    { id:"shinjuku", code:"09", title:"Shinjuku Hesaplaşması", subtitle:"En Güçlüler", volumeIds:["vol-25","vol-26","vol-27","vol-28","vol-29","vol-30"], chapters:"218–271", note:"Gojo ve Sukuna ile başlayan son kuşatma, serinin kaderini belirler." }
+  ];
+
   function loadProgress() {
-    try { read = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    try { read = JSON.parse(JJKAuth.storage.getItem(STORAGE_KEY)) || {}; }
     catch { read = {}; }
   }
 
   function saveProgress() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(read));
+    JJKAuth.storage.setItem(STORAGE_KEY, JSON.stringify(read));
   }
 
   function setRead(id, value) {
@@ -24,6 +37,34 @@
     saveProgress();
     renderStats();
     renderVolumes();
+  }
+
+  function renderTimeline() {
+    const host = document.querySelector("#mangaTimeline");
+    if (!host) return;
+    const firstUnread = volumes.find((volume) => !read[volume.id])?.id;
+
+    host.innerHTML = STORY_ARCS.map((arc, index) => {
+      const arcVolumes = arc.volumeIds.map((id) => volumes.find((volume) => volume.id === id)).filter(Boolean);
+      const completed = arcVolumes.filter((volume) => read[volume.id]).length;
+      const percent = arcVolumes.length ? Math.round((completed / arcVolumes.length) * 100) : 0;
+      const target = arcVolumes.find((volume) => !read[volume.id]) || arcVolumes[0];
+      const done = completed === arcVolumes.length && arcVolumes.length > 0;
+      const current = !done && arc.volumeIds.includes(firstUnread);
+      const state = done ? "done" : current ? "current" : "upcoming";
+      const volumeLabel = arcVolumes.length === 1 ? `Cilt ${arcVolumes[0].number}` : `Cilt ${arcVolumes[0]?.number}–${arcVolumes.at(-1)?.number}`;
+      return `<article class="timeline-entry ${state}" style="--arc-progress:${percent}%" data-arc="${arc.id}">
+        <div class="timeline-rail"><span><b>${arc.code}</b></span><i></i></div>
+        <div class="timeline-card">
+          <div class="timeline-card-top"><span>${JJK.escapeHtml(arc.subtitle)}</span><b>${JJK.escapeHtml(arc.chapters)}</b></div>
+          <h3>${JJK.escapeHtml(arc.title)}</h3>
+          <p>${JJK.escapeHtml(arc.note)}</p>
+          <div class="timeline-progress"><i></i><span>${completed}/${arcVolumes.length} cilt</span></div>
+          <button type="button" data-timeline-volume="${target?.id || ""}">${done ? "Tekrar aç" : current ? "Devam et" : "Dosyayı aç"}<span>${volumeLabel} →</span></button>
+        </div>
+        ${current ? '<em>SIRADAKİ DOSYA</em>' : ''}
+      </article>`;
+    }).join("");
   }
 
   function renderStats() {
@@ -45,6 +86,7 @@
       ring.style.setProperty("--progress", `${percent * 3.6}deg`);
       ring.querySelector("strong").textContent = `${percent}%`;
     }
+    renderTimeline();
   }
 
   function visibleVolumes() {
@@ -141,6 +183,12 @@
   }
 
   function bindEvents() {
+    document.querySelector("#mangaTimeline").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-timeline-volume]");
+      if (!button || !button.dataset.timelineVolume) return;
+      openModal(button.dataset.timelineVolume);
+    });
+
     document.querySelector("#volumeGrid").addEventListener("click", (event) => {
       const action = event.target.closest("[data-action]");
       const card = event.target.closest(".volume-card");
@@ -188,6 +236,8 @@
       renderStats();
       renderVolumes();
       bindEvents();
+      const requested = new URLSearchParams(location.search).get("volume");
+      if (requested && volumes.some((volume) => volume.id === requested)) openModal(requested);
     } catch (error) {
       host.innerHTML = `<p class="empty">Manga kütüphanesi yüklenemedi: ${JJK.escapeHtml(error.message)}</p>`;
     }

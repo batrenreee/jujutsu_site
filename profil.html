@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JJK Merkez — Büyücü Dosyası</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body data-page="profile">
+    <div id="topbar"></div>
+    <main class="profile-page">
+      <section class="profile-hero" id="profileHero"><p class="empty">Büyücü dosyası hazırlanıyor…</p></section>
+
+      <section class="profile-metrics" id="profileMetrics" aria-label="Profil istatistikleri"></section>
+
+      <section class="profile-section">
+        <header class="profile-section-head"><div><span>PERSONEL BAŞARILARI</span><h2>Rozet Arşivi</h2></div><p>Siteyi kullandıkça yeni sınıflandırmalar ve rozetler açılır.</p></header>
+        <div class="badge-vault" id="badgeVault"></div>
+      </section>
+
+      <section class="profile-section">
+        <header class="profile-section-head"><div><span>SEÇİLİ DOSYALAR</span><h2>Karakter Koleksiyonu</h2></div><a href="karakterler.html">Vikiyi aç →</a></header>
+        <div class="profile-favorites" id="profileFavorites"></div>
+      </section>
+
+      <section class="profile-section">
+        <header class="profile-section-head"><div><span>OKUMA KAYDI</span><h2>Manga Rafı</h2></div><a href="manga.html">Kütüphaneye git →</a></header>
+        <div class="profile-shelf" id="profileShelf"></div>
+      </section>
+
+      <section class="profile-section account-settings-section" id="accountSettings">
+        <header class="profile-section-head"><div><span>HESAP YÖNETİMİ</span><h2>Hesap ve Güvenlik</h2></div><p>Profil fotoğrafını, görünen adını ve giriş parolanı buradan yönetebilirsin.</p></header>
+        <div class="account-settings-grid">
+          <article class="avatar-settings-card">
+            <span>01 // PROFİL FOTOĞRAFI</span>
+            <div class="avatar-settings-preview" id="avatarPreview">呪</div>
+            <div><h3>Dosya portresi</h3><p>JPG, PNG veya WebP. Görsel cihazda küçültülerek güvenli hesap veritabanına kaydedilir.</p></div>
+            <input id="avatarInput" type="file" accept="image/jpeg,image/png,image/webp" hidden />
+            <div class="account-settings-actions"><button class="btn" id="avatarSelect" type="button">Fotoğraf seç</button><button class="settings-ghost" id="avatarRemove" type="button">Kaldır</button></div>
+          </article>
+          <article class="identity-settings-card">
+            <span>02 // KİMLİK BİLGİLERİ</span><h3>Hesap ayrıntıları</h3>
+            <dl><div><dt>Kullanıcı adı</dt><dd id="settingsDisplayName">—</dd></div><div><dt>E-posta</dt><dd id="settingsEmail">—</dd></div><div><dt>Katılım tarihi</dt><dd id="settingsJoined">—</dd></div></dl>
+            <button class="settings-ghost" id="settingsEditProfile" type="button">Kullanıcı adını düzenle →</button>
+          </article>
+          <article class="password-settings-card">
+            <span>03 // GÜVENLİK</span><h3>Parolayı değiştir</h3><p>Yeni parolayı kaydetmeden önce mevcut parolanı doğrulaman gerekir.</p>
+            <form id="passwordForm" novalidate><label>Mevcut parola<input name="currentPassword" type="password" autocomplete="current-password" required /></label><label>Yeni parola<input name="newPassword" type="password" autocomplete="new-password" minlength="8" required /></label><label>Yeni parola tekrar<input name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required /></label><p class="settings-message" id="passwordMessage" role="status"></p><button class="btn" type="submit">Parolayı güncelle</button></form>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal-overlay" id="profileEditor" role="dialog" aria-modal="true" aria-label="Profili düzenle">
+      <form class="modal profile-editor-form">
+        <button class="modal-close" type="button" aria-label="Kapat">×</button>
+        <span>DOSYA AYARLARI</span><h2>Kimliğini Düzenle</h2>
+        <label>Dosya adı<input id="profileName" maxlength="24" autocomplete="nickname" /></label>
+        <label>Uzmanlık<select id="profileTitle"><option>Jujutsu Öğrencisi</option><option>Lanet Araştırmacısı</option><option>1. Sınıf Büyücü</option><option>Bariyer Uzmanı</option><option>Özel Sınıf Adayı</option></select></label>
+        <button class="btn" type="submit">Dosyayı kaydet</button>
+      </form>
+    </div>
+
+    <div id="footer"></div>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/profile.js"></script>
+  </body>
+</html>

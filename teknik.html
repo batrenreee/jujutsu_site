@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JJK Merkez — Lanet Tekniği Laboratuvarı</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body data-page="technique">
+    <div id="topbar"></div>
+
+    <section class="technique-hero">
+      <div><span>JUJUTSU HIGH // YASAK ARAŞTIRMA 06</span><h1>Lanet Tekniği<br />Laboratuvarı</h1><p>Lanet enerjinin kaynağını, savaş biçimini ve ödemeye hazır olduğun bedeli seç. Sistem sana özgü tekniği sınıflandırsın.</p></div>
+      <aside><b>術</b><small>TEKNİK ÜRETİM MOTORU</small><i>Çevrim içi</i></aside>
+    </section>
+
+    <main class="technique-page">
+      <section class="technique-console" aria-labelledby="generatorTitle">
+        <header><span>YAPILANDIRMA // 03 PARAMETRE</span><h2 id="generatorTitle">Lanet Formülü</h2><p>Her seçim nihai tekniğin gücünü, kontrolünü ve bedelini değiştirir.</p></header>
+
+        <div class="technique-steps">
+          <fieldset data-choice="source"><legend><b>01</b><span>Enerjinin kaynağı<small>Laneti besleyen çekirdek dürtü</small></span></legend><div class="technique-options">
+            <button type="button" data-value="memory"><i>記</i><strong>Hafıza</strong><small>İz bırakır, tekrarlar</small></button>
+            <button type="button" data-value="fear"><i>恐</i><strong>Korku</strong><small>Zayıflığı büyütür</small></button>
+            <button type="button" data-value="rage"><i>怒</i><strong>Öfke</strong><small>Ham gücü yükseltir</small></button>
+            <button type="button" data-value="void"><i>虚</i><strong>Boşluk</strong><small>Mesafeyi büker</small></button>
+          </div></fieldset>
+
+          <fieldset data-choice="form"><legend><b>02</b><span>Savaş biçimi<small>Tekniğin sahadaki davranışı</small></span></legend><div class="technique-options">
+            <button type="button" data-value="close"><i>撃</i><strong>Yakın Dövüş</strong><small>Temas ve patlama</small></button>
+            <button type="button" data-value="range"><i>射</i><strong>Menzil</strong><small>İzleme ve atış</small></button>
+            <button type="button" data-value="barrier"><i>界</i><strong>Bariyer</strong><small>Alan ve kontrol</small></button>
+            <button type="button" data-value="summon"><i>召</i><strong>Çağırma</strong><small>Varlık ve komuta</small></button>
+          </div></fieldset>
+
+          <fieldset data-choice="vow"><legend><b>03</b><span>Bağlayıcı yemin<small>Güç karşılığında kabul edilen bedel</small></span></legend><div class="technique-options vow-options">
+            <button type="button" data-value="measured"><i>静</i><strong>Ölçülü</strong><small>Düşük risk · yüksek kontrol</small></button>
+            <button type="button" data-value="balanced"><i>契</i><strong>Dengeli</strong><small>Karşılıklı kısıtlama</small></button>
+            <button type="button" data-value="extreme"><i>死</i><strong>Ölümcül</strong><small>Ağır bedel · azami çıktı</small></button>
+          </div></fieldset>
+        </div>
+
+        <div class="technique-command"><div><span id="formulaStatus">0 / 3 parametre seçildi</span><i><b id="formulaProgress"></b></i></div><button class="btn" id="generateTechnique" type="button" disabled>FORMÜLÜ MÜHÜRLE</button></div>
+      </section>
+
+      <section class="technique-result" id="techniqueResult" aria-live="polite">
+        <div class="technique-result-empty"><b>?</b><span>SONUÇ DOSYASI</span><h2>Henüz teknik üretilmedi</h2><p>Üç parametreyi seçtiğinde lanet formülü burada açılacak.</p></div>
+      </section>
+
+      <section class="technique-archive-section">
+        <header><div><span>KİŞİSEL KAYITLAR</span><h2>Teknik Arşivi</h2></div><p>Kaydettiğin özgün teknikler yalnızca bu cihazda tutulur.</p></header>
+        <div class="technique-archive" id="techniqueArchive"></div>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/technique.js"></script>
+  </body>
+</html>

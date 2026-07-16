@@ -79,6 +79,7 @@
   function showResult() {
     const winner = computeWinner();
     const r = DATA.results[winner];
+    JJKAuth.storage.setItem("jjk-quiz-result-v1", JSON.stringify({ id:winner, name:r.name, img:r.img, completedAt:new Date().toISOString() }));
     const shareText = `Jujutsu Kaisen karakter testinde sonucum: ${r.name}! Sen kimsin?`;
 
     app().innerHTML = `
