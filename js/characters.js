@@ -124,6 +124,8 @@
   let filters = { search:"", side:"all", status:"all", affiliation:"all", sort:"featured" };
   let showSpoilers = JJKAuth.storage.getItem("jjk-show-spoilers") === "true";
   let compareIds = [];
+  const CLASH_GIF="img/gojo-sukuna-clash.gif";
+  let clashGifPreload=null,clashEggTimer=null;
   let favorites = (() => {
     try { const value=JSON.parse(JJKAuth.storage.getItem("jjk-favorite-characters-v1")||"[]"); return Array.isArray(value)?value:[]; }
     catch { return []; }
@@ -215,7 +217,23 @@
     if(compareIds.includes(id))compareIds=compareIds.filter(item=>item!==id);
     else if(compareIds.length<2)compareIds.push(id);
     else { compareIds=[compareIds[1],id]; JJK.toast("İlk dosya değiştirildi."); }
+    if(id==="gojo"||id==="sukuna")preloadClashGif();
     render(); renderCompareTray();
+  }
+
+  function preloadClashGif(){
+    if(clashGifPreload)return clashGifPreload;
+    clashGifPreload=new Image();clashGifPreload.src=CLASH_GIF;return clashGifPreload;
+  }
+
+  function playClashGif(){
+    clearTimeout(clashEggTimer);document.querySelector(".clash-gif-impact")?.remove();
+    const impact=document.createElement("div");impact.className="clash-gif-impact";impact.setAttribute("aria-hidden","true");
+    impact.innerHTML=`<div class="clash-gif-frame"><img src="${CLASH_GIF}" alt="" /><span>THE STRONGEST</span><b>GOJO // SUKUNA</b><i>領域展開</i></div>`;
+    document.body.appendChild(impact);
+    const image=impact.querySelector("img"),start=()=>{if(!impact.isConnected||impact.classList.contains("active"))return;requestAnimationFrame(()=>impact.classList.add("active"));clashEggTimer=setTimeout(()=>impact.remove(),2050);};
+    image.addEventListener("load",start,{once:true});image.addEventListener("error",()=>impact.remove(),{once:true});
+    if(image.complete&&image.naturalWidth)start();
   }
 
   function statRows(c) {
@@ -239,7 +257,7 @@
     const left=ALL.find(c=>c.id===compareIds[0]), right=ALL.find(c=>c.id===compareIds[1]);
     if(!left||!right)return;
     const special=[left.id,right.id].sort().join(":")==="gojo:sukuna";
-    const overlay=document.querySelector("#compareModal"), modal=overlay.querySelector(".compare-modal");
+    const overlay=document.querySelector("#compareModal"), modal=overlay.querySelector(".compare-modal"),firstOpen=!overlay.classList.contains("open");
     modal.classList.toggle("special-clash",special);
     modal.innerHTML=`
       <header class="compare-head"><div><small>${special?"SHINJUKU // 24.12":"DOSYA ANALİZİ // VS"}</small><h2>${special?"En Güçlülerin Hesaplaşması":"Karakter Karşılaştırması"}</h2><p>${special?"Sınırsızlık açık. Mabedin bariyeri yok. Geriye yalnızca kimin alanının ayakta kalacağı kaldı.":"Değerler resmî bir güç sıralaması değil; teknik, eşleşme ve savaş koşullarının editoryal özetidir."}</p></div><button class="modal-close" type="button" aria-label="Kapat">×</button></header>
@@ -249,6 +267,7 @@
     overlay.classList.add("open"); document.body.classList.add("modal-open");
     modal.querySelector(".modal-close").addEventListener("click",closeCompare);
     modal.querySelector("#swapCompare").addEventListener("click",()=>{compareIds.reverse();openCompare();renderCompareTray();});
+    if(special&&firstOpen)playClashGif();
     if(special&&window.JJKAudio)window.JJKAudio.playSfx("special");
   }
 
