@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-03T10:05:47.451Z",
+  "updatedAt": "2026-08-17T18:57:15.012Z",
   "sources": [
     {
       "name": "Crunchyroll News",
@@ -16,6 +16,30 @@
     }
   ],
   "items": [
+    {
+      "id": "live-d80dd49085a63f",
+      "title": "Jujutsu Kaisen Ranks #2 on Bookscan's July Adult Graphic Novel List in U.S.",
+      "date": "2026-08-17",
+      "publishedAt": "2026-08-17T17:15:00.000Z",
+      "category": "Manga",
+      "source": "Anime News Network",
+      "img": "img/characters/yuta.webp",
+      "excerpt": "Anime News Network, Jujutsu Kaisen ile ilgili yeni bir gelişme yayımladı. Ayrıntıları kaynak sayfasından doğrulayabilirsin.",
+      "readTime": 1,
+      "popularity": 90,
+      "url": "https://www.animenewsnetwork.com/news/2026-08-17/jujutsu-kaisen-ranks-no.2-on-bookscan-july-adult-graphic-novel-list-in-u.s/.240650",
+      "auto": true,
+      "content": [
+        "Anime News Network, bu Jujutsu Kaisen gelişmesini 17 Ağustos 2026 tarihinde yayımladı.",
+        "Kaynağın özgün özeti: 18 manga volumes including One Piece, The Summer Hikaru Died, Gachiakuta, Chainsaw Man, Witch Hat Atelier, Phantom Busters, The Guy She Was Interested In Wasn't a Guy at All, Steel Ball Run, Demon Slayer, Blue Lock make list",
+        "Bu madde otomatik canlı haber akışından alınmıştır. En güncel ve eksiksiz bilgi için aşağıdaki resmî kaynak düğmesini kullan."
+      ],
+      "highlights": [
+        "Otomatik canlı akış",
+        "Anime News Network",
+        "Kaynak bağlantısı doğrulandı"
+      ]
+    },
     {
       "id": "live-f8d1cd64ddf93f",
       "title": "Jujutsu Kaisen Manga Gets 5th Stage Play in November",
