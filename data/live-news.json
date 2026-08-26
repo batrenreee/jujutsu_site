@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-25T01:52:15.312Z",
+  "updatedAt": "2026-08-26T20:03:05.038Z",
   "sources": [
     {
       "name": "Crunchyroll News",
@@ -16,6 +16,30 @@
     }
   ],
   "items": [
+    {
+      "id": "live-630ce06d013802",
+      "title": "JUJUTSU KAISEN: Hidden Inventory / Premature Death Anime Film Blu-ray Launches This November",
+      "date": "2026-08-26",
+      "publishedAt": "2026-08-26T16:44:00.000Z",
+      "category": "Ürün",
+      "source": "Crunchyroll News",
+      "img": "img/characters/megumi.webp",
+      "excerpt": "Crunchyroll News, Jujutsu Kaisen ile ilgili yeni bir gelişme yayımladı. Ayrıntıları kaynak sayfasından doğrulayabilirsin.",
+      "readTime": 1,
+      "popularity": 90,
+      "url": "https://crunchyroll.com/news/announcements/2026/8/26/november-2026-home-video-crunchyroll-jujutsu-kaisen-hidden-inventory-premature-death",
+      "auto": true,
+      "content": [
+        "Crunchyroll News, bu Jujutsu Kaisen gelişmesini 26 Ağustos 2026 tarihinde yayımladı.",
+        "Kaynağın özgün özeti: Crunchyroll reveals upcoming slate of new releases and SteelBooks!",
+        "Bu madde otomatik canlı haber akışından alınmıştır. En güncel ve eksiksiz bilgi için aşağıdaki resmî kaynak düğmesini kullan."
+      ],
+      "highlights": [
+        "Otomatik canlı akış",
+        "Crunchyroll News",
+        "Kaynak bağlantısı doğrulandı"
+      ]
+    },
     {
       "id": "live-063b502e2edbbf",
       "title": "Jujutsu Kaisen, The Summer Hikaru Died Rank on NYT August Bestseller List",
