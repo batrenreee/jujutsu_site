@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-28T22:20:32.662Z",
+  "updatedAt": "2026-08-29T16:43:20.678Z",
   "sources": [
     {
       "name": "Crunchyroll News",
@@ -16,6 +16,30 @@
     }
   ],
   "items": [
+    {
+      "id": "live-359b23f7255022",
+      "title": "JUJUTSU KAISEN Season 4 Anime Reveals Super Teaser Visual",
+      "date": "2026-08-29",
+      "publishedAt": "2026-08-29T09:32:00.000Z",
+      "category": "Oyun",
+      "source": "Crunchyroll News",
+      "img": "img/characters/yuji.webp",
+      "excerpt": "Crunchyroll News, Jujutsu Kaisen ile ilgili yeni bir gelişme yayımladı. Ayrıntıları kaynak sayfasından doğrulayabilirsin.",
+      "readTime": 1,
+      "popularity": 90,
+      "url": "https://crunchyroll.com/news/latest/2026/8/29/jujutsu-kaisen-season-4-anime-super-teaser-visual",
+      "auto": true,
+      "content": [
+        "Crunchyroll News, bu Jujutsu Kaisen gelişmesini 29 Ağustos 2026 tarihinde yayımladı.",
+        "Kaynağın özgün özeti: \"The Culling Game Part 2\" is currently in production at MAPPA",
+        "Bu madde otomatik canlı haber akışından alınmıştır. En güncel ve eksiksiz bilgi için aşağıdaki resmî kaynak düğmesini kullan."
+      ],
+      "highlights": [
+        "Otomatik canlı akış",
+        "Crunchyroll News",
+        "Kaynak bağlantısı doğrulandı"
+      ]
+    },
     {
       "id": "live-630ce06d013802",
       "title": "JUJUTSU KAISEN: Hidden Inventory / Premature Death Anime Film Blu-ray Launches This November",
