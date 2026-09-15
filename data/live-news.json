@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-15T11:44:25.436Z",
+  "updatedAt": "2026-09-15T16:59:36.640Z",
   "sources": [
     {
       "name": "Crunchyroll News",
@@ -16,6 +16,30 @@
     }
   ],
   "items": [
+    {
+      "id": "live-36dff7e166b3de",
+      "title": "JUJUTSU KAISEN RUMBLE: SURVIVATON Game Delayed, New Trailer Showcased",
+      "date": "2026-09-15",
+      "publishedAt": "2026-09-15T13:44:00.000Z",
+      "category": "Oyun",
+      "source": "Crunchyroll News",
+      "img": "img/characters/yuji.webp",
+      "excerpt": "Crunchyroll News, Jujutsu Kaisen ile ilgili yeni bir gelişme yayımladı. Ayrıntıları kaynak sayfasından doğrulayabilirsin.",
+      "readTime": 1,
+      "popularity": 90,
+      "url": "https://crunchyroll.com/news/latest/2026/9/15/jujutsu-kaisen-rumble-survivaton-game-delayed-new-trailer-showcased",
+      "auto": true,
+      "content": [
+        "Crunchyroll News, bu Jujutsu Kaisen gelişmesini 15 Eylül 2026 tarihinde yayımladı.",
+        "Kaynağın özgün özeti: 2026 release window pushed back to 2027",
+        "Bu madde otomatik canlı haber akışından alınmıştır. En güncel ve eksiksiz bilgi için aşağıdaki resmî kaynak düğmesini kullan."
+      ],
+      "highlights": [
+        "Otomatik canlı akış",
+        "Crunchyroll News",
+        "Kaynak bağlantısı doğrulandı"
+      ]
+    },
     {
       "id": "live-16454ef8a37df8",
       "title": "Jujutsu Kaisen Rumble: Survivaton Game Delayed to 2027",
